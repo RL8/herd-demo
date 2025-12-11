@@ -7,17 +7,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #1a1a1a; /* Dark background to make the phone view pop */
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             margin: 0;
-            padding: 0;
+            padding: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
+            overflow: auto;
         }
 
         /* Custom scrollbar for the phone screen */
@@ -25,7 +24,7 @@
             width: 4px;
         }
         .phone-screen::-webkit-scrollbar-track {
-            background: #f1f1f1; 
+            background: #f9fafb; 
         }
         .phone-screen::-webkit-scrollbar-thumb {
             background: #ccc; 
@@ -36,12 +35,17 @@
         }
 
         .fade-in {
-            animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .brand-color {
@@ -54,48 +58,203 @@
             border-color: #0d9488;
         }
         
-        /* Simulating iPhone dimensions - iPhone 14 Pro size */
+        /* Fixed iPhone 14 Pro dimensions - emulator style */
         .device-frame {
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            width: 393px; /* iPhone 14 Pro width */
-            height: 852px; /* iPhone 14 Pro height */
-            margin: 20px auto;
-            border-radius: 40px; /* iOS rounded corners */
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.1);
+            width: 393px; /* iPhone 14 Pro width - FIXED */
+            height: 852px; /* iPhone 14 Pro height - FIXED */
+            margin: 0 auto;
+            border-radius: 47px; /* iOS rounded corners */
             overflow: hidden;
-            background: white;
+            background: #000; /* Black bezel */
             display: flex;
             flex-direction: column;
             position: relative;
-            border: 8px solid #1a1a1a; /* Phone bezel */
+            flex-shrink: 0; /* Prevent shrinking */
         }
         
-        @media (max-width: 450px) {
-            .device-frame {
-                width: 100vw;
-                height: 100vh;
-                border-radius: 0;
-                margin: 0;
-                border: 0;
-            }
+        /* Screen area inside bezel */
+        .device-screen {
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            border-radius: 40px;
+            margin: 6px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
         }
+
+        /* Dynamic Island */
+        .dynamic-island {
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 126px;
+            height: 37px;
+            background: #000;
+            border-radius: 19px;
+            z-index: 1001;
+            pointer-events: none;
+        }
+        
+        /* iOS Status Bar with Safe Area */
+        .ios-status-bar {
+            height: 44px;
+            background: transparent;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            margin-top: 44px; /* Safe area top for Dynamic Island */
+            font-size: 15px;
+            font-weight: 600;
+            color: #000000;
+            position: relative;
+            z-index: 1000;
+        }
+        
+        .ios-status-left {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 600;
+        }
+        
+        .ios-status-right {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Signal Bars */
+        .signal-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 12px;
+        }
+
+        .signal-bar {
+            width: 3px;
+            background: #000000;
+            border-radius: 1px;
+        }
+
+        .signal-bar:nth-child(1) { height: 4px; }
+        .signal-bar:nth-child(2) { height: 6px; }
+        .signal-bar:nth-child(3) { height: 8px; }
+        .signal-bar:nth-child(4) { height: 10px; }
+        .signal-bar:nth-child(5) { height: 12px; }
+
+        /* Battery Icon */
+        .battery-icon {
+            width: 24px;
+            height: 12px;
+            border: 1.5px solid #000000;
+            border-radius: 2px;
+            position: relative;
+            margin-left: 4px;
+        }
+
+        .battery-icon::after {
+            content: '';
+            position: absolute;
+            right: -4px;
+            top: 3px;
+            width: 2px;
+            height: 6px;
+            background: #000000;
+            border-radius: 0 1px 1px 0;
+        }
+
+        .battery-fill {
+            position: absolute;
+            left: 2px;
+            top: 2px;
+            width: 18px;
+            height: 8px;
+            background: #000000;
+            border-radius: 1px;
+            transition: background 0.3s ease;
+        }
+        
+        /* Home Indicator with Safe Area */
+        .home-indicator {
+            position: absolute;
+            bottom: 34px; /* Safe area bottom */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 134px;
+            height: 5px;
+            background: #000000;
+            border-radius: 3px;
+            opacity: 0.3;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        /* Frosted Glass Effect */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        /* Card with glass effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+
+        /* Safe Area Padding */
+        .safe-area-top {
+            padding-top: 44px;
+        }
+
+        .safe-area-bottom {
+            padding-bottom: 34px;
+        }
+
     </style>
-</head>
+ </head>
 <body>
 
     <!-- Device Frame -->
-    <div class="device-frame w-full relative">
+    <div class="device-frame">
+        <div class="device-screen">
         
-        <!-- Status Bar Mockup -->
-        <div class="bg-white border-b border-gray-100 p-2 flex justify-between items-center text-xs text-gray-500 px-6">
-            <span>9:41 AM</span>
-            <div class="flex gap-2">
-                <i class="fas fa-wifi"></i>
-                <i class="fas fa-battery-full"></i>
+        <!-- Dynamic Island -->
+        <div class="dynamic-island"></div>
+        
+        <!-- iOS Status Bar -->
+        <div class="ios-status-bar">
+            <div class="ios-status-left">
+                <span>9:41</span>
+            </div>
+            <div class="ios-status-right">
+                <div class="signal-bars">
+                    <div class="signal-bar"></div>
+                    <div class="signal-bar"></div>
+                    <div class="signal-bar"></div>
+                    <div class="signal-bar"></div>
+                    <div class="signal-bar"></div>
+                </div>
+                <div class="battery-icon">
+                    <div class="battery-fill"></div>
+                </div>
             </div>
         </div>
 
         <!-- App Header (Persistent across some screens) -->
-        <div id="app-header" class="bg-white p-4 border-b border-gray-100 flex justify-between items-center hidden">
+        <div id="app-header" class="glass-effect p-4 border-b border-gray-100 flex justify-between items-center hidden" style="background: #ffffff;">
             <div class="flex items-center gap-2">
                 <div class="w-8 h-8 rounded-full bg-teal-600 flex items-center justify-center text-white font-bold text-xs">HM</div>
                 <span class="font-semibold text-gray-700">HERDMind®</span>
@@ -107,15 +266,15 @@
         <div id="main-content" class="phone-screen flex-1 overflow-y-auto relative bg-gray-50">
             
             <!-- SCREEN 1: INTRO MODAL -->
-            <div id="screen-intro" class="p-8 flex flex-col items-center justify-center min-h-full fade-in">
-                <div class="bg-white rounded-2xl shadow-xl p-8 max-w-2xl w-full border border-gray-100">
+            <div id="screen-intro" class="p-8 flex flex-col items-center justify-center min-h-full fade-in safe-area-bottom" style="padding-top: calc(2rem + 44px + 44px);">
+                <div class="glass-card rounded-2xl p-8 max-w-2xl w-full">
                     <div class="flex justify-end mb-2">
                         <button class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
                     </div>
                     
-                    <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">HOW TO USE THE SESSION PLANS</h1>
+                    <h1 class="text-2xl font-bold mb-6 text-center" style="color: #000000;">HOW TO USE THE SESSION PLANS</h1>
                     
-                    <div class="space-y-4 text-gray-600 text-sm leading-relaxed">
+                    <div class="space-y-4 text-sm leading-relaxed" style="color: #6b7280;">
                         <p>At HERDMind®, we believe that each equine facilitated session is a unique unfolding between the horses and humans present. We truly believe that "It's not about the activity" - the creator of HERDMind, Dr. Veronica Lac, even wrote a book all about that! So, why have we developed this session plan generator?</p>
                         
                         <p>We recognize that even the most seasoned practitioner might need some help to think creatively in sessions. We also hear from new practitioners asking for help to get them started with ideas for different client populations.</p>
@@ -126,11 +285,11 @@
                         
                         <p>Each session begins by assuming that you have already covered the basics of safety and confidentiality in your session.</p>
                         
-                        <p class="italic text-gray-500">Have some ideas of your own? Feel free to share a session plan with us in our discussion forum!</p>
+                        <p class="italic" style="color: #6b7280;">Have some ideas of your own? Feel free to share a session plan with us in our discussion forum!</p>
                     </div>
 
                     <div class="mt-8 flex flex-col items-center gap-4">
-                        <label class="flex items-center gap-2 text-sm text-gray-500 cursor-pointer select-none">
+                        <label class="flex items-center gap-2 text-sm cursor-pointer select-none" style="color: #6b7280;">
                             <input type="checkbox" class="w-4 h-4 text-teal-600 rounded border-gray-300 focus:ring-teal-500">
                             Don't show this message again
                         </label>
@@ -149,10 +308,10 @@
                         HM
                     </div>
                     
-                    <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">Let's Create Your Session Plan</h2>
-                    <p class="text-center text-gray-500 mb-8 text-sm">Tell us a few details about your session and HERDMind will build a session plan for you, complete with facilitator tips.</p>
+                    <h2 class="text-2xl font-bold text-center mb-2" style="color: #000000;">Let's Create Your Session Plan</h2>
+                    <p class="text-center mb-8 text-sm" style="color: #6b7280;">Tell us a few details about your session and HERDMind will build a session plan for you, complete with facilitator tips.</p>
 
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-5">
+                    <div class="glass-card p-6 rounded-xl space-y-5">
                         <!-- Input 1 -->
                         <div>
                             <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">What is your scope of practice?</label>
@@ -215,13 +374,13 @@
                     <button class="bg-teal-600 text-white text-xs py-1 px-3 rounded-full hover:bg-teal-700"><i class="fas fa-undo mr-1"></i> CREATE NEW PLAN</button>
                 </div>
 
-                <h3 class="text-center text-gray-700 font-bold mb-6">CHECK OUT YOUR SESSION PLANS!</h3>
+                <h3 class="text-center font-bold mb-6" style="color: #000000;">CHECK OUT YOUR SESSION PLANS!</h3>
 
                 <!-- Result Card -->
                 <div onclick="goToScreen('plan')" class="bg-gray-100 rounded-xl p-6 cursor-pointer hover:bg-gray-200 transition-colors border-l-4 border-teal-500 shadow-sm flex justify-between items-center group">
                     <div>
-                        <h4 class="text-lg font-bold text-gray-800">Woven Identity</h4>
-                        <p class="text-sm text-gray-500 mt-1">Specific Focus: <span class="text-gray-700 font-medium">Identity & Belonging</span></p>
+                        <h4 class="text-lg font-bold" style="color: #000000;">Woven Identity</h4>
+                        <p class="text-sm mt-1" style="color: #6b7280;">Specific Focus: <span class="font-medium" style="color: #000000;">Identity & Belonging</span></p>
                     </div>
                     <div class="text-teal-600 group-hover:translate-x-1 transition-transform">
                         <i class="fas fa-arrow-right text-xl"></i>
@@ -238,10 +397,10 @@
             </div>
 
             <!-- SCREEN 4: DETAILED PLAN -->
-            <div id="screen-plan" class="hidden fade-in pb-24"> <!-- Extra padding for footer -->
+            <div id="screen-plan" class="hidden fade-in safe-area-bottom" style="padding-bottom: calc(1.5rem + 34px);"> <!-- Extra padding for footer -->
                 
                 <!-- Nav Bar -->
-                <div class="sticky top-0 bg-white z-10 px-4 py-3 shadow-sm flex justify-between items-center">
+                <div class="sticky top-0 glass-effect z-10 px-4 py-3 flex justify-between items-center" style="background: #ffffff;">
                     <button onclick="goToScreen('selection')" class="bg-teal-600 text-white text-xs py-1 px-3 rounded-md hover:bg-teal-700">
                         <i class="fas fa-arrow-left mr-1"></i> BACK
                     </button>
@@ -257,30 +416,30 @@
                     
                     <!-- Title Section -->
                     <div class="text-center mb-6">
-                        <h1 class="text-2xl font-bold text-gray-800">Woven Identity</h1>
-                        <p class="text-sm text-gray-500 mt-1">Session Focus:</p>
-                        <p class="font-medium text-gray-800">Identity & Belonging</p>
+                        <h1 class="text-2xl font-bold" style="color: #000000;">Woven Identity</h1>
+                        <p class="text-sm mt-1" style="color: #6b7280;">Session Focus:</p>
+                        <p class="font-medium" style="color: #000000;">Identity & Belonging</p>
                     </div>
 
                     <!-- Materials Card -->
-                    <div class="bg-teal-50 border border-teal-100 rounded-xl p-5 shadow-sm">
+                    <div class="glass-card rounded-xl p-5" style="background: rgba(13, 148, 136, 0.1); border: 1px solid rgba(13, 148, 136, 0.2);">
                         <div class="flex flex-col items-center text-center">
                             <i class="fas fa-search text-teal-600 text-xl mb-2"></i>
-                            <h3 class="font-bold text-gray-800 text-sm mb-2">Materials Needed:</h3>
-                            <p class="font-medium text-gray-700 text-sm">Multicolored ribbons, markers/pens</p>
+                            <h3 class="font-bold text-sm mb-2" style="color: #000000;">Materials Needed:</h3>
+                            <p class="font-medium text-sm" style="color: #000000;">Multicolored ribbons, markers/pens</p>
                             <hr class="w-full border-teal-200 my-3">
-                            <p class="text-sm text-gray-600 leading-relaxed">
+                            <p class="text-sm leading-relaxed" style="color: #6b7280;">
                                 This session supports exploration of identity and belonging. Participants use multicolored ribbons to represent parts of themselves, their communities, and their connections while spending time with horses.
                             </p>
                         </div>
                     </div>
 
                     <!-- Objectives Card -->
-                    <div class="bg-teal-50 border border-teal-100 rounded-xl p-5 shadow-sm">
+                    <div class="glass-card rounded-xl p-5" style="background: rgba(13, 148, 136, 0.1); border: 1px solid rgba(13, 148, 136, 0.2);">
                         <div class="flex flex-col items-center text-center">
                             <i class="fas fa-tasks text-teal-600 text-xl mb-2"></i>
-                            <h3 class="font-bold text-gray-800 text-sm mb-2">Session Objectives</h3>
-                            <div class="text-left text-sm text-gray-600 space-y-2">
+                            <h3 class="font-bold text-sm mb-2" style="color: #000000;">Session Objectives</h3>
+                            <div class="text-left text-sm space-y-2" style="color: #6b7280;">
                                 <p>1. Choose and express parts of identity using simple symbolic materials.</p>
                                 <p>2. Experience self-directed movement and choice of space as affirming ways to be present.</p>
                             </div>
@@ -288,12 +447,12 @@
                     </div>
 
                     <!-- Details Card -->
-                    <div class="bg-teal-50 border border-teal-100 rounded-xl p-5 shadow-sm">
+                    <div class="glass-card rounded-xl p-5" style="background: rgba(13, 148, 136, 0.1); border: 1px solid rgba(13, 148, 136, 0.2);">
                         <div class="flex flex-col items-center text-center mb-4">
                             <i class="far fa-file-alt text-teal-600 text-xl mb-2"></i>
-                            <h3 class="font-bold text-gray-800 text-sm">Session Details</h3>
+                            <h3 class="font-bold text-sm" style="color: #000000;">Session Details</h3>
                         </div>
-                        <div class="text-sm text-gray-600 space-y-4 leading-relaxed text-justify">
+                        <div class="text-sm space-y-4 leading-relaxed text-justify" style="color: #6b7280;">
                             <p>The session begins with participants choosing from a variety of multicolored ribbons. They may hold, wear, or tie their ribbons together to create a larger item.</p>
                             <p>The facilitator introduces the idea of identity as layered and changing, and as something that belongs to each person. Participants then carry their ribbons into the pasture or arena where horses are at liberty.</p>
                             <p>Participants move through the space in their own way, choosing to connect with horses, other participants, or remain on their own. The facilitator invites reflection on comfort, expression, and being seen. Reflective prompts may include, "How might your ribbons help you to connect with others - horses and humans?"</p>
@@ -303,35 +462,35 @@
                     </div>
 
                     <!-- Welfare Card -->
-                    <div class="bg-teal-50 border border-teal-100 rounded-xl p-5 shadow-sm">
+                    <div class="glass-card rounded-xl p-5" style="background: rgba(13, 148, 136, 0.1); border: 1px solid rgba(13, 148, 136, 0.2);">
                         <div class="flex flex-col items-center text-center mb-2">
                             <i class="fas fa-horse-head text-teal-600 text-xl mb-2"></i>
-                            <h3 class="font-bold text-gray-800 text-sm">Equine Welfare Considerations</h3>
+                            <h3 class="font-bold text-sm" style="color: #000000;">Equine Welfare Considerations</h3>
                         </div>
-                        <ul class="text-sm text-gray-600 text-center space-y-1">
+                        <ul class="text-sm text-center space-y-1" style="color: #6b7280;">
                             <li>Include horses accustomed to fluttering ribbons.</li>
                             <li>Make sure horses don't ingest the ribbons.</li>
                         </ul>
                     </div>
 
                     <!-- Facilitator Notes Card -->
-                    <div class="bg-teal-50 border border-teal-100 rounded-xl p-5 shadow-sm">
+                    <div class="glass-card rounded-xl p-5" style="background: rgba(13, 148, 136, 0.1); border: 1px solid rgba(13, 148, 136, 0.2);">
                         <div class="flex flex-col items-center text-center mb-2">
                             <i class="fas fa-user-friends text-teal-600 text-xl mb-2"></i>
-                            <h3 class="font-bold text-gray-800 text-sm">Facilitator Notes</h3>
+                            <h3 class="font-bold text-sm" style="color: #000000;">Facilitator Notes</h3>
                         </div>
-                        <p class="text-sm text-gray-600 text-center">
+                        <p class="text-sm text-center" style="color: #6b7280;">
                             Avoid assumptions about gender/cultural expression, or relationship dynamics. Name and normalize the wide range of comfort with visibility, choice, and shared space.
                         </p>
                     </div>
 
                     <!-- Variations Card -->
-                    <div class="bg-teal-50 border border-teal-100 rounded-xl p-5 shadow-sm">
+                    <div class="glass-card rounded-xl p-5" style="background: rgba(13, 148, 136, 0.1); border: 1px solid rgba(13, 148, 136, 0.2);">
                         <div class="flex flex-col items-center text-center mb-4">
                             <i class="fas fa-random text-teal-600 text-xl mb-2"></i>
-                            <h3 class="font-bold text-gray-800 text-sm">Variations</h3>
+                            <h3 class="font-bold text-sm" style="color: #000000;">Variations</h3>
                         </div>
-                        <div class="space-y-4 text-sm text-gray-600">
+                        <div class="space-y-4 text-sm" style="color: #6b7280;">
                             <div>
                                 <span class="font-bold text-teal-700">Variation 1:</span>
                                 <p class="mt-1">Participants are invited to pick a ribbon and write on the ribbon what support they need to feel a sense of belonging. The group then creates a lead rope with their ribbons and leads a horse through a series of cones. How do the supports they need show up in the process? What is the horse teaching them about support? Paying attention to how the horses respond to being led, participants can choose to allow the horse off the ribbon lead. What choices does the horse have in the moment? Where do they want to go? What happens if they don't go through the cones? How can we remain connected if we don't want the same thing?</p>
@@ -355,7 +514,7 @@
                             <i class="far fa-star"></i>
                             <i class="far fa-star"></i>
                         </div>
-                        <button onclick="goToScreen('feedback')" class="text-gray-500 text-sm hover:text-teal-600">Rate Session?</button>
+                        <button onclick="goToScreen('feedback')" class="text-sm hover:text-teal-600" style="color: #6b7280;">Rate Session?</button>
                     </div>
 
                 </div>
@@ -370,7 +529,7 @@
                 <h2 class="text-teal-700 font-bold uppercase tracking-wide text-sm mb-8">WE APPRECIATE YOUR FEEDBACK</h2>
 
                 <div class="w-full max-w-md">
-                    <p class="text-center text-gray-600 mb-2 text-sm">Want to add a comment?</p>
+                    <p class="text-center mb-2 text-sm" style="color: #6b7280;">Want to add a comment?</p>
                     <textarea class="w-full h-32 p-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm resize-none" placeholder="Enter Feedback"></textarea>
                     
                     <div class="flex justify-center gap-4 text-2xl text-teal-600 my-6 cursor-pointer">
@@ -393,7 +552,7 @@
             </div>
 
             <!-- Global Footer Navigation (Mimicking the App Tabs) -->
-            <div id="app-footer" class="fixed bottom-0 w-full bg-teal-600 text-white flex justify-around py-3 rounded-b-3xl hidden" style="max-width: 393px;">
+            <div id="app-footer" class="fixed bottom-0 w-full bg-teal-600 text-white flex justify-around py-3 rounded-b-3xl hidden glass-effect" style="max-width: 381px; padding-bottom: calc(1rem + 34px); backdrop-filter: blur(20px);">
                 <button class="flex flex-col items-center opacity-70 hover:opacity-100 w-1/4">
                     <i class="fas fa-home text-lg"></i>
                     <span class="text-[10px] mt-1">Home</span>
@@ -411,6 +570,9 @@
                     <span class="text-[10px] mt-1">Profile</span>
                 </button>
             </div>
+            
+            <!-- Home Indicator -->
+            <div class="home-indicator"></div>
 
         </div>
     </div>
@@ -440,8 +602,11 @@
                 footer.classList.remove('hidden');
             }
 
-            // Scroll to top
-            document.getElementById('main-content').scrollTop = 0;
+            // Scroll to top with smooth animation
+            document.getElementById('main-content').scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         }
 
         // Form Logic

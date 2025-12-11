@@ -1,0 +1,206 @@
+﻿====================================================================================================
+COMPLETE BREAKDOWN OF ALL SESSION PLAN COMBINATIONS
+====================================================================================================
+
+Total Session Plans: 39
+Unique Combinations: 27
+
+
+====================================================================================================
+CLIENT CATEGORY: General Adult Population
+====================================================================================================
+
+  Theme: Building Confidence & Self Esteem
+  ------------------------------------------------------------------------------------------------
+
+    Props: No Props Needed
+    Number of session plans: 1
+      - [105] Confident Presence
+
+    Props: Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)
+    Number of session plans: 1
+      - [108] Rolling Confidence
+
+    Props: Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)
+    Number of session plans: 1
+      - [83] Seen and Heard
+
+  Theme: Exploring Identity & Belonging
+  ------------------------------------------------------------------------------------------------
+
+    Props: No Props Needed
+    Number of session plans: 1
+      - [106] Belonging in The HERD
+
+  Theme: Finding Safety & Nervous System Regulation
+  ------------------------------------------------------------------------------------------------
+
+    Props: Creative Tools (e.g.paint, chalk, journaling, crafts)
+    Number of session plans: 1
+      - [107] Artful HERD
+
+  Theme: Rediscovering Balance
+  ------------------------------------------------------------------------------------------------
+
+    Props: Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)
+    Number of session plans: 1
+      - [109] Balancing Acts
+
+  Theme: Relational Dynamics (e.g. Trust, Boundaries etc)
+  ------------------------------------------------------------------------------------------------
+
+    Props: Creative Tools (e.g.paint, chalk, journaling, crafts)
+    Number of session plans: 1
+      - [84] Points of View
+
+    Props: No Props Needed
+    Number of session plans: 1
+      - [104] Matching Steps
+
+    Props: Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)
+    Number of session plans: 2
+      - [80] Wild Card
+      - [79] Favorite Spots
+
+====================================================================================================
+CLIENT CATEGORY: Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)
+====================================================================================================
+
+  Theme: Rediscovering Balance
+  ------------------------------------------------------------------------------------------------
+
+    Props: No Props Needed
+    Number of session plans: 1
+      - [73] Reclaiming Breath and Space
+
+    Props: Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)
+    Number of session plans: 2
+      - [65] Steady Ground
+      - [60] Carrying On
+
+    Props: Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)
+    Number of session plans: 3
+      - [67] Holding What Was
+      - [63] Remembering Ourselves
+      - [57] The Overflowing Bucket
+
+  Theme: Relational Dynamics (e.g. Trust, Boundaries etc)
+  ------------------------------------------------------------------------------------------------
+
+    Props: Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)
+    Number of session plans: 2
+      - [66] Circles of Rest
+      - [55] Flexing Boundaries
+
+====================================================================================================
+CLIENT CATEGORY: Organizational Teams/Leaders
+====================================================================================================
+
+  Theme: Building Confidence & Self Esteem
+  ------------------------------------------------------------------------------------------------
+
+    Props: Creative Tools (e.g.paint, chalk, journaling, crafts)
+    Number of session plans: 1
+      - [64] Crossroads
+
+  Theme: Rediscovering Balance
+  ------------------------------------------------------------------------------------------------
+
+    Props: Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)
+    Number of session plans: 1
+      - [61] Balancing Acts
+
+  Theme: Relational Dynamics (e.g. Trust, Boundaries etc)
+  ------------------------------------------------------------------------------------------------
+
+    Props: Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)
+    Number of session plans: 3
+      - [77] Leading Together
+      - [72] The Strategic Line
+      - [62] Bunker Wars
+
+====================================================================================================
+CLIENT CATEGORY: Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)
+====================================================================================================
+
+  Theme: Building Confidence & Self Esteem
+  ------------------------------------------------------------------------------------------------
+
+    Props: Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)
+    Number of session plans: 1
+      - [69] Volume and Voice
+
+  Theme: Exploring Identity & Belonging
+  ------------------------------------------------------------------------------------------------
+
+    Props: Creative Tools (e.g.paint, chalk, journaling, crafts)
+    Number of session plans: 1
+      - [54] Expressions of Belonging
+
+    Props: Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)
+    Number of session plans: 2
+      - [75] Rainbows & Ribbons
+      - [74] Sounding Out
+
+  Theme: Finding Safety & Nervous System Regulation
+  ------------------------------------------------------------------------------------------------
+
+    Props: No Props Needed
+    Number of session plans: 1
+      - [53] Finding Ground
+
+    Props: Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)
+    Number of session plans: 1
+      - [56] Trigger Points
+
+    Props: Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)
+    Number of session plans: 1
+      - [71] Roots and Radiance
+
+  Theme: Relational Dynamics (e.g. Trust, Boundaries etc)
+  ------------------------------------------------------------------------------------------------
+
+    Props: Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)
+    Number of session plans: 2
+      - [78] Come With Me
+      - [70] Freedom in Authenticity
+
+    Props: Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)
+    Number of session plans: 3
+      - [68] Natural Resources
+      - [59] Scents of Remembrance
+      - [58] Threads of Connection
+
+====================================================================================================
+CLIENT CATEGORY: Youth & Young Adults
+====================================================================================================
+
+  Theme: Building Confidence & Self Esteem
+  ------------------------------------------------------------------------------------------------
+
+    Props: Creative Tools (e.g.paint, chalk, journaling, crafts)
+    Number of session plans: 2
+      - [85] Stories in Motion
+      - [81] The Way Forward
+
+  Theme: Exploring Identity & Belonging
+  ------------------------------------------------------------------------------------------------
+
+    Props: Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)
+    Number of session plans: 1
+      - [76] Woven Identity
+
+  Theme: Relational Dynamics (e.g. Trust, Boundaries etc)
+  ------------------------------------------------------------------------------------------------
+
+    Props: Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)
+    Number of session plans: 1
+      - [82] Balance in Conflict
+
+
+====================================================================================================
+COMBINATION MATRIX SUMMARY
+====================================================================================================
+
+Format: [Category] Î [Theme] Î [Props] = Count of Session Plans
+

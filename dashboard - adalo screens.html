@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herd Screens - Categorization Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        .content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            padding: 30px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .stats-grid.expanded {
+            max-height: 500px;
+            opacity: 1;
+        }
+        .stats-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            user-select: none;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 15px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+        .stats-toggle:hover {
+            border-color: #667eea;
+            background: white;
+        }
+        .stats-toggle::before {
+            content: '▼';
+            display: inline-block;
+            transition: transform 0.3s;
+            font-size: 0.8em;
+        }
+        .stats-toggle.collapsed::before {
+            transform: rotate(-90deg);
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .stat-card h3 {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+        .stat-card .value {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .chart-container {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .chart-container h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .category-chart-wrapper {
+            max-height: 400px;
+            overflow: hidden;
+        }
+        .filters {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .filter-group label {
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #555;
+            font-size: 0.9em;
+        }
+        .filter-count {
+            font-size: 0.8em;
+            color: #999;
+            margin-left: 4px;
+        }
+        .filter-group select,
+        .filter-group input {
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.95em;
+            transition: all 0.3s;
+        }
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .table-container {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95em;
+        }
+        thead {
+            position: sticky;
+            top: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            z-index: 10;
+        }
+        th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+        }
+        th:hover {
+            background: linear-gradient(135deg, #5a6fd8 0%, #6b3f92 100%);
+        }
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 0.95em;
+        }
+        tbody tr:nth-child(even) {
+            background: rgba(102, 126, 234, 0.03);
+        }
+        tbody tr:hover {
+            background: rgba(102, 126, 234, 0.08);
+        }
+        .col-screen {
+            font-weight: 500;
+            max-width: 200px;
+        }
+        .col-category {
+            font-weight: 600;
+            color: #667eea;
+        }
+        .col-confidence {
+            font-size: 0.85em;
+            color: #666;
+        }
+        .col-method {
+            font-size: 0.85em;
+            color: #999;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .badge-high {
+            background: #d4edda;
+            color: #155724;
+        }
+        .badge-medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .badge-low {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .badge-rule {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        .badge-fuzzy {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+        .badge-none {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 1.1em;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            border-top: 1px solid #e0e0e0;
+        }
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .filters {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Herd Screens Dashboard</h1>
+            <p>Explore categorized screens with filters, charts, and detailed data</p>
+        </div>
+        
+        <div class="content">
+            <!-- Stats Toggle -->
+            <div class="stats-toggle collapsed" id="stats-toggle">
+                📊 Summary Stats (Click to expand)
+            </div>
+
+            <!-- Stats Grid (Collapsed by default) -->
+            <div class="stats-grid" id="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Screens</h3>
+                    <div class="value" id="total-screens">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Categories</h3>
+                    <div class="value" id="total-categories">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Avg Confidence</h3>
+                    <div class="value" id="avg-confidence">0%</div>
+                </div>
+                <div class="stat-card">
+                    <h3>High Confidence</h3>
+                    <div class="value" id="high-confidence">0%</div>
+                </div>
+            </div>
+
+            <!-- Category Chart Only -->
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <h3>📂 Screen Distribution by Category</h3>
+                    <div class="category-chart-wrapper">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="category-filter">Category <span class="filter-count" id="cat-count"></span></label>
+                    <select id="category-filter">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="search-filter">Search Screen <span class="filter-count" id="search-count"></span></label>
+                    <input type="text" id="search-filter" placeholder="Type to search...">
+                </div>
+            </div>
+
+            <!-- Data Table -->
+            <div class="table-container">
+                <table id="data-table">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Screen Name</th>
+                            <th onclick="sortTable(1)">Category</th>
+                            <th onclick="sortTable(2)">Confidence</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <tr><td colspan="3" class="no-data">Loading data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Data Dashboard | Generated from categorized_screens.csv | Last updated: <span id="timestamp"></span></p>
+        </div>
+    </div>
+
+    <script>
+        let allData = [];
+        let charts = {};
+
+        // Embedded CSV data
+        const csvData = `screen_name,assigned_category,confidence,match_method,match_detail
+panel-item-header-title,Misc / Utilities / For Later Release,1.0,rule,panel-item-header-title
+About HERDMind (not logged in),Social / Community,1.0,rule,herdmind
+About HERDMind®,Social / Community,1.0,rule,herdmind
+All HERDMind Only Posts,Social / Community,1.0,rule,posts
+All HERDSter Only Posts,Social / Community,1.0,rule,posts
+All Set Up,Uncategorized,0.0,none,
+Annual Log Update Screen,Misc / Utilities / For Later Release,0.75,fuzzy_medium,add screen
+Annual Membership Pricing,Subscriptions & Billing,1.0,rule,membership pricing
+Annual Membership Pricing HERDGM,Subscriptions & Billing,1.0,rule,membership pricing
+Annual Membership Pricing HERDSG,Subscriptions & Billing,1.0,rule,membership pricing
+Annual Membership Pricing Release 2,Subscriptions & Billing,1.0,rule,membership pricing
+Annual Membership Pricing Transition,Subscriptions & Billing,1.0,rule,membership pricing
+Articles Library Categories,Content Library / Media,1.0,rule,articles
+Articles List,Content Library / Media,1.0,rule,articles
+Auto Renewal,Subscriptions & Billing,1.0,rule,auto renewal
+Block User Confirmed,Social / Community,1.0,rule,block user
+Block User HERDMind Comment,Social / Community,1.0,rule,comment
+Block User HERDMind Post,Social / Community,1.0,rule,post
+Block User HERDster Comment,Social / Community,1.0,rule,comment
+Block User HERDster Post,Social / Community,1.0,rule,post
+Blocked Users,Administration / Management,1.0,rule,blocked users
+Bookmarks Feed,Social / Community,1.0,rule,bookmarks feed
+Bookmarks Feed (HERDster),Social / Community,1.0,rule,bookmarks feed
+Build Your Network,Social / Community,1.0,rule,build your network
+Cancel Stripe Checkout,Subscriptions & Billing,1.0,rule,cancel
+Cancel Subscription,Subscriptions & Billing,1.0,rule,cancel
+Change Password,Authentication & Account,1.0,rule,change password
+Chat Invitation,Chat & Messaging,1.0,rule,chat
+Chat Screen,Chat & Messaging,1.0,rule,chat
+ChatBot Conversation,Chat & Messaging,0.7272727272727272,fuzzy_medium,conversations
+Child Comment HERDMind,Social / Community,1.0,rule,comment
+Child Comment HERDMind 2,Social / Community,1.0,rule,comment
+Child Comment HERDster,Social / Community,1.0,rule,comment
+Child Comment HERDster  2,Social / Community,1.0,rule,comment
+ChoicePoint Games,Games & Interactive Flow,1.0,rule,choicepoint
+Community Forum Guidelines,Onboarding & Help,1.0,rule,community forum guidelines
+Community Forum Welcome Page new,Onboarding & Help,1.0,rule,welcome
+Contact Us,Onboarding & Help,1.0,rule,contact us
+Conversations List,Chat & Messaging,1.0,rule,conversations
+Create Secure Password,Authentication & Account,1.0,rule,create secure password
+Delete Account Confirmation,Authentication & Account,1.0,rule,delete account
+Delete Chat Modal,Chat & Messaging,1.0,rule,chat
+Delete HERDMind Comment,Social / Community,1.0,rule,comment
+Delete HERDMind Post,Social / Community,1.0,rule,post
+Delete HERDster Comment,Social / Community,1.0,rule,comment
+Delete HERDster Post,Social / Community,1.0,rule,post
+Detailed Session Plan,Session Plans & Meetings,1.0,rule,session plan
+Edit Post (HERDsters),Social / Community,1.0,rule,post
+Edit Post HERDMind,Social / Community,1.0,rule,post
+Edit Profile Info,Profiles & Settings,1.0,rule,profile
+Edit Profile Pic,Profiles & Settings,1.0,rule,profile
+Edit Topic,Uncategorized,0.0,none,
+Email Sign Up Release 1.0,Authentication & Account,1.0,rule,sign up
+Favorite Session Plan Details,Session Plans & Meetings,1.0,rule,session plan
+Favorite Sessions,Session Plans & Meetings,1.0,rule,favorite sessions
+Field Theory Ending A,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Ending B,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Ending C,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Ending D,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Ending E,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Ending F,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Ending G,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen  10,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen  11,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen  12,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen  13,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen  14,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen  15,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen  16,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen  17,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen  18,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen  19,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen  2,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen  20,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen  21,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen  22,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen  23,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen  24,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen  3,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen  4,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen  5,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen  6,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen  7,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen  8,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen  9,Games & Interactive Flow,1.0,rule,field theory
+Field Theory Screen 1,Games & Interactive Flow,1.0,rule,field theory
+For later Release,Misc / Utilities / For Later Release,1.0,rule,for later release
+Forgot Password Reset Catch,Authentication & Account,1.0,rule,forgot password
+Forgot Password Screen  3,Authentication & Account,1.0,rule,forgot password
+Free Overview,Uncategorized,0.0,none,
+Game Style 1 Ending A,Games & Interactive Flow,1.0,rule,game style
+Game Style 1 Ending B,Games & Interactive Flow,1.0,rule,game style
+Game Style 1 Ending C,Games & Interactive Flow,1.0,rule,game style
+Game Style 1 Ending D,Games & Interactive Flow,1.0,rule,game style
+Game Style 1 Scene 1,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Ending A,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Ending B,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Ending C,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Ending D,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Scene  1,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Scene  2,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Scene  21,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Scene  22,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Scene  23,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Scene  3,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Scene  4,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Scene  6,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Scene 10,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Scene 11,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Scene 12,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Scene 13,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Scene 14,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Scene 15,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Scene 16,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Scene 17,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Scene 18,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Scene 19,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Scene 20,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Scene 5,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Scene 7,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Scene 8,Games & Interactive Flow,1.0,rule,game style
+Game Style 2 Scene 9,Games & Interactive Flow,1.0,rule,game style
+Game Style Scene  10,Games & Interactive Flow,1.0,rule,game style
+Game Style Scene  11,Games & Interactive Flow,1.0,rule,game style
+Game Style Scene  12,Games & Interactive Flow,1.0,rule,game style
+Game Style Scene  13,Games & Interactive Flow,1.0,rule,game style
+Game Style Scene  14,Games & Interactive Flow,1.0,rule,game style
+Game Style Scene  15,Games & Interactive Flow,1.0,rule,game style
+Game Style Scene  17,Games & Interactive Flow,1.0,rule,game style
+Game Style Scene  18,Games & Interactive Flow,1.0,rule,game style
+Game Style Scene  19,Games & Interactive Flow,1.0,rule,game style
+Game Style Scene  20,Games & Interactive Flow,1.0,rule,game style
+Game Style Scene  21,Games & Interactive Flow,1.0,rule,game style
+Game Style Scene  22,Games & Interactive Flow,1.0,rule,game style
+Game Style Scene  23,Games & Interactive Flow,1.0,rule,game style
+Game Style Scene  3,Games & Interactive Flow,1.0,rule,game style
+Game Style Scene  4,Games & Interactive Flow,1.0,rule,game style
+Game Style Scene  5,Games & Interactive Flow,1.0,rule,game style
+Game Style Scene  6,Games & Interactive Flow,1.0,rule,game style
+Game Style Scene  7,Games & Interactive Flow,1.0,rule,game style
+Game Style Scene  8,Games & Interactive Flow,1.0,rule,game style
+Game Style Scene  9,Games & Interactive Flow,1.0,rule,game style
+Game Style Scene 16,Games & Interactive Flow,1.0,rule,game style
+Game Style Scene 2,Games & Interactive Flow,1.0,rule,game style
+Games for later release,Games & Interactive Flow,1.0,rule,games for later release
+HERD Affiliation (Profile Edit),Profiles & Settings,1.0,rule,profile
+HERD Affiliation?,Profiles & Settings,1.0,rule,herd affiliation
+HERD Members Only Topics,Uncategorized,0.0,none,
+HERDMind Community Topics,Social / Community,1.0,rule,herdmind
+Hidden Posts,Social / Community,1.0,rule,posts
+Hidden Replies,Social / Community,1.0,rule,hidden replies
+Hidden Replies  to Replies,Social / Community,1.0,rule,hidden replies
+Home,Misc / Utilities / For Later Release,1.0,fuzzy_high,home android
+Home Android Version 0.23,Misc / Utilities / For Later Release,1.0,rule,home android
+Home Apple Version 0.0.23,Misc / Utilities / For Later Release,1.0,rule,home apple
+Home WPA,Misc / Utilities / For Later Release,1.0,rule,wpa
+How To Play ChoicePoints Games,Onboarding & Help,1.0,rule,how to
+How To Use Session Plans,Session Plans & Meetings,1.0,rule,session plans
+IAPHUB Check Error,IAP / Platform Checks,1.0,rule,iaphub
+IAPHUB Check Subscription Screen (Sign up),Authentication & Account,1.0,rule,sign up
+IAPHUB Check Subscription Screen Log in,Authentication & Account,1.0,rule,log in
+IAPHUB Check Transition Screen,"Modals, Confirmations & Transitions",1.0,rule,transition
+IAPHUB Check Transition Screen  3,"Modals, Confirmations & Transitions",1.0,rule,transition
+IAPHUB Check Transition Screen 2,"Modals, Confirmations & Transitions",1.0,rule,transition
+IAPHUB Restore,Authentication & Account,1.0,rule,restore
+Interested in?,Misc / Utilities / For Later Release,1.0,fuzzy_high,interested in?
+Loading Screen,Misc / Utilities / For Later Release,1.0,rule,loading
+Log In,Authentication & Account,1.0,rule,log in
+Log In Transition Screen,Authentication & Account,1.0,rule,log in
+Manage Subscription Modal,Subscriptions & Billing,1.0,rule,subscription
+Message Received,Chat & Messaging,1.0,rule,message
+Monthly Log Update Screen,Misc / Utilities / For Later Release,0.75,fuzzy_medium,add screen
+Monthly Membership Pricing,Subscriptions & Billing,1.0,rule,membership pricing
+Monthly Membership Pricing  HERDSG,Subscriptions & Billing,1.0,rule,membership pricing
+Monthly Membership Pricing HERDGM,Subscriptions & Billing,1.0,rule,membership pricing
+Monthly Membership Pricing Release 2,Subscriptions & Billing,1.0,rule,membership pricing
+More Modal,"Modals, Confirmations & Transitions",1.0,rule,modal
+My Profile,Profiles & Settings,1.0,rule,profile
+New Chat Modal,Chat & Messaging,1.0,rule,chat
+New Post (HERDMind Only),Social / Community,1.0,rule,post
+New Post (HERDsters),Social / Community,1.0,rule,post
+New Session Request,Session Plans & Meetings,1.0,rule,session request
+New Session Request  2 (For release 1.2),Session Plans & Meetings,1.0,rule,session request
+News Alerts,Notifications & Alerts,1.0,rule,news alerts
+Notifications List,Notifications & Alerts,1.0,rule,notifications
+Notifications List 2,Notifications & Alerts,1.0,rule,notifications
+Notifications Routing Screen,Notifications & Alerts,1.0,rule,notifications
+Paid Feature Only,Misc / Utilities / For Later Release,1.0,rule,paid feature only
+Parent Comments HERDMind,Social / Community,1.0,rule,comments
+Parent Comments HERDMster,Social / Community,1.0,rule,comments
+Payment Failed,Subscriptions & Billing,1.0,rule,payment failed
+Pdf Generator,Content Library / Media,1.0,rule,pdf generator
+Plan Limit Reached Modal,"Modals, Confirmations & Transitions",1.0,rule,modal
+Plan Limit Reached Modal Transition,"Modals, Confirmations & Transitions",1.0,rule,modal
+Print Favorite Sessions,Session Plans & Meetings,1.0,rule,favorite sessions
+Report Comment (HERDMind),Social / Community,1.0,rule,comment
+Report Comment (HERDster),Social / Community,1.0,rule,comment
+Report Post (HERDMind),Social / Community,1.0,rule,post
+Report Post (HERDster),Social / Community,1.0,rule,post
+Report Submitted (HERDMind),Social / Community,1.0,rule,report
+Report Submitted HERDster,Social / Community,1.0,rule,report
+Request Result,Uncategorized,0.0,none,
+Restored Success,"Modals, Confirmations & Transitions",0.7058823529411765,fuzzy_medium,success transition
+Restored Success Transition,"Modals, Confirmations & Transitions",1.0,rule,success transition
+Restored Success Transition 2,"Modals, Confirmations & Transitions",1.0,rule,success transition
+Scope of Practice,Onboarding & Help,1.0,rule,scope of practice
+Session Ratings,Session Plans & Meetings,1.0,rule,session ratings
+Session Ratings 2,Session Plans & Meetings,1.0,rule,session ratings
+Setup Step  1,Uncategorized,0.0,none,
+Sign Up Release  2,Authentication & Account,1.0,rule,sign up
+Sign Up Release 1.0,Authentication & Account,1.0,rule,sign up
+Sign Up Transition,Authentication & Account,1.0,rule,sign up
+Small Print,Profiles & Settings,1.0,rule,small print
+Social Profile HERDMind Comments,Social / Community,1.0,rule,comments
+Social Profile HERDMind Posts,Social / Community,1.0,rule,posts
+Social Profile HERDSter Comments,Social / Community,1.0,rule,comments
+Social Profile HERDster Posts,Social / Community,1.0,rule,posts
+Success Modal,"Modals, Confirmations & Transitions",1.0,rule,modal
+Trial Ended Upgrade,Subscriptions & Billing,1.0,rule,trial
+Unblock Request Confirmation,"Modals, Confirmations & Transitions",1.0,rule,confirmation
+Upgrade Codes Modal,Subscriptions & Billing,1.0,rule,upgrade
+Upgrade Prompt,Subscriptions & Billing,1.0,rule,upgrade
+Upgrade Prompt Transition,Subscriptions & Billing,1.0,rule,upgrade
+Video Categories,Content Library / Media,1.0,rule,video
+Video Categories (Release 2),Content Library / Media,1.0,rule,video
+Video List,Content Library / Media,1.0,rule,video
+Video Viewer,Content Library / Media,1.0,rule,video
+View Article,Content Library / Media,1.0,rule,article
+View HERDMind Post Comments,Social / Community,1.0,rule,post
+View HERDster Post Comments,Social / Community,1.0,rule,post
+YOUR SUBSCRIPTION HAS ENDED,Subscriptions & Billing,1.0,rule,subscription
+Add Screen,Misc / Utilities / For Later Release,1.0,rule,add screen`;
+
+        // Parse CSV data
+        function loadData() {
+            Papa.parse(csvData, {
+                header: true,
+                skipEmptyLines: true,
+                complete: (results) => {
+                    allData = results.data;
+                    initializeDashboard();
+                },
+                error: (err) => {
+                    console.error('CSV Parse Error:', err);
+                    document.getElementById('table-body').innerHTML = 
+                        '<tr><td colspan="5" class="no-data">Error parsing CSV data</td></tr>';
+                }
+            });
+        }
+
+        function initializeDashboard() {
+            updateStats();
+            updateCharts();
+            populateFilters();
+            renderTable(allData);
+            updateFilterCounts();
+            document.getElementById('timestamp').textContent = new Date().toLocaleString();
+            
+            // Setup stats toggle
+            document.getElementById('stats-toggle').addEventListener('click', () => {
+                const toggle = document.getElementById('stats-toggle');
+                const grid = document.getElementById('stats-grid');
+                toggle.classList.toggle('collapsed');
+                grid.classList.toggle('expanded');
+            });
+        }
+
+        function updateFilterCounts() {
+            const catFilter = document.getElementById('category-filter').value;
+            const searchFilter = document.getElementById('search-filter').value.toLowerCase();
+            
+            // Count screens by category (excluding current filters)
+            const catCounts = {};
+            allData.forEach(d => {
+                if (searchFilter && !d.screen_name.toLowerCase().includes(searchFilter)) return;
+                catCounts[d.assigned_category] = (catCounts[d.assigned_category] || 0) + 1;
+            });
+            
+            // Count search results
+            const searchCount = searchFilter ? allData.filter(d => 
+                d.screen_name.toLowerCase().includes(searchFilter)
+            ).length : allData.length;
+            
+            document.getElementById('cat-count').textContent = catFilter ? 
+                `(${catCounts[catFilter] || 0})` : 
+                `(${Object.keys(catCounts).length} categories)`;
+            
+            document.getElementById('search-count').textContent = searchFilter ? 
+                `(${searchCount})` : '';
+        }
+
+        function updateStats() {
+            const total = allData.length;
+            const categories = new Set(allData.map(d => d.assigned_category)).size;
+            const confidences = allData.map(d => parseFloat(d.confidence) || 0);
+            const avgConf = (confidences.reduce((a, b) => a + b, 0) / total * 100).toFixed(1);
+            const highConf = (allData.filter(d => parseFloat(d.confidence) >= 0.85).length / total * 100).toFixed(1);
+
+            document.getElementById('total-screens').textContent = total;
+            document.getElementById('total-categories').textContent = categories;
+            document.getElementById('avg-confidence').textContent = avgConf + '%';
+            document.getElementById('high-confidence').textContent = highConf + '%';
+        }
+
+        function updateCharts() {
+            // Category Distribution - only show this chart
+            const catCounts = {};
+            allData.forEach(d => {
+                catCounts[d.assigned_category] = (catCounts[d.assigned_category] || 0) + 1;
+            });
+            const sortedCats = Object.entries(catCounts)
+                .sort((a, b) => b[1] - a[1]);
+
+            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+            if (charts.category) charts.category.destroy();
+            charts.category = new Chart(categoryCtx, {
+                type: 'bar',
+                data: {
+                    labels: sortedCats.map(e => e[0]),
+                    datasets: [{
+                        label: 'Screens',
+                        data: sortedCats.map(e => e[1]),
+                        backgroundColor: 'rgba(102, 126, 234, 0.7)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 2,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 10 }
+                        }
+                    }
+                }
+            });
+        }
+
+        function populateFilters() {
+            const categories = [...new Set(allData.map(d => d.assigned_category))].sort();
+            const select = document.getElementById('category-filter');
+            categories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                option.textContent = cat;
+                select.appendChild(option);
+            });
+        }
+
+        function getFilters() {
+            return {
+                category: document.getElementById('category-filter').value,
+                search: document.getElementById('search-filter').value.toLowerCase()
+            };
+        }
+
+        function filterData() {
+            const filters = getFilters();
+            return allData.filter(d => {
+                if (filters.category && d.assigned_category !== filters.category) return false;
+                if (filters.search && !d.screen_name.toLowerCase().includes(filters.search)) return false;
+                return true;
+            });
+        }
+
+        function getConfidenceBadge(conf) {
+            const c = parseFloat(conf);
+            if (c >= 0.85) return 'badge-high';
+            if (c >= 0.70) return 'badge-medium';
+            return 'badge-low';
+        }
+
+        function getMethodBadge(method) {
+            if (method === 'rule') return 'badge-rule';
+            if (method.includes('fuzzy')) return 'badge-fuzzy';
+            return 'badge-none';
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('table-body');
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" class="no-data">No data matches filters</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = data.map(row => `
+                <tr>
+                    <td class="col-screen">${row.screen_name}</td>
+                    <td class="col-category">${row.assigned_category}</td>
+                    <td class="col-confidence">${(parseFloat(row.confidence) * 100).toFixed(0)}%</td>
+                </tr>
+            `).join('');
+        }
+
+        function sortTable(colIndex) {
+            const tbody = document.getElementById('table-body');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            const isAscending = tbody.dataset.sortCol === colIndex && tbody.dataset.sortAsc === 'true';
+            
+            rows.sort((a, b) => {
+                const aVal = a.cells[colIndex].textContent.trim();
+                const bVal = b.cells[colIndex].textContent.trim();
+                const numA = parseFloat(aVal);
+                const numB = parseFloat(bVal);
+                
+                if (!isNaN(numA) && !isNaN(numB)) {
+                    return isAscending ? numB - numA : numA - numB;
+                }
+                return isAscending ? bVal.localeCompare(aVal) : aVal.localeCompare(bVal);
+            });
+
+            tbody.dataset.sortCol = colIndex;
+            tbody.dataset.sortAsc = !isAscending;
+            rows.forEach(r => tbody.appendChild(r));
+        }
+
+        // Event listeners
+        document.getElementById('category-filter').addEventListener('change', () => {
+            renderTable(filterData());
+            updateFilterCounts();
+        });
+        document.getElementById('search-filter').addEventListener('input', () => {
+            renderTable(filterData());
+            updateFilterCounts();
+        });
+
+        // Load data on page load
+        window.addEventListener('load', loadData);
+    </script>
+</body>
+</html>

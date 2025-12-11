@@ -1,0 +1,2328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HERDMind Session Plan Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.3s ease, opacity 0.3s ease, margin 0.3s ease;
+        }
+
+        .stats-bar.expanded {
+            max-height: 200px;
+            opacity: 1;
+            margin-top: 15px;
+        }
+
+        .stats-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            user-select: none;
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+
+        .stats-toggle:hover {
+            opacity: 1;
+        }
+
+        .stats-toggle::before {
+            content: '▼';
+            display: inline-block;
+            transition: transform 0.3s;
+            font-size: 0.8em;
+        }
+
+        .stats-toggle.collapsed::before {
+            transform: rotate(-90deg);
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 6px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .controls {
+            padding: 20px;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 10px;
+        }
+
+        .view-toggle button {
+            padding: 8px 16px;
+            border: 1px solid #d1d5db;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .view-toggle button.active {
+            background: #0d9488;
+            color: white;
+            border-color: #0d9488;
+        }
+
+        .content {
+            min-height: 600px;
+        }
+
+        .main-panel {
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        /* Slide-in side panel */
+        .side-panel-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 1000;
+        }
+
+        .side-panel-backdrop.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .side-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1001;
+            overflow-y: auto;
+        }
+
+        .side-panel.active {
+            transform: translateX(0);
+        }
+
+        .side-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f9fafb;
+        }
+
+        .side-panel-header h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #374151;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .close-btn:hover {
+            background: #e5e7eb;
+        }
+
+        .side-panel-content {
+            padding: 20px;
+        }
+
+        .grid-view {
+            display: none;
+        }
+
+        .grid-view.active {
+            display: block;
+        }
+
+        .grid-container {
+            display: grid;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .category-section {
+            margin-bottom: 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .category-title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #374151;
+            padding: 15px 20px;
+            background: #f9fafb;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .category-title:hover {
+            background: #f3f4f6;
+        }
+
+        .category-title::after {
+            content: '▼';
+            transition: transform 0.3s;
+            font-size: 0.8em;
+            color: #0d9488;
+        }
+
+        .category-title.collapsed::after {
+            transform: rotate(-90deg);
+        }
+
+        .category-content {
+            max-height: 2000px;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 15px;
+        }
+
+        .category-content.collapsed {
+            max-height: 0;
+            padding: 0 15px;
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: 150px repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .theme-header {
+            font-weight: 600;
+            font-size: 12px;
+            padding: 8px;
+            background: #f3f4f6;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .prop-header {
+            font-weight: 600;
+            font-size: 11px;
+            padding: 8px 4px;
+            background: #f3f4f6;
+            border-radius: 4px;
+            text-align: center;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+        .grid-cell {
+            padding: 12px 8px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 11px;
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .plan-name {
+            font-weight: 500;
+            line-height: 1.3;
+            word-wrap: break-word;
+            max-width: 100%;
+        }
+
+        .grid-cell.has-plan {
+            background: #d1fae5;
+            border-color: #10b981;
+            color: #065f46;
+        }
+
+        .grid-cell.has-plan:hover {
+            background: #a7f3d0;
+            transform: scale(1.05);
+        }
+
+        .grid-cell.missing,
+        .grid-cell.potential {
+            background: #fef3c7;
+            border-color: #f59e0b;
+            color: #92400e;
+        }
+
+        .grid-cell.missing:hover,
+        .grid-cell.potential:hover {
+            background: #fde68a;
+        }
+
+        .cell-count {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .cell-label {
+            font-size: 10px;
+            margin-top: 4px;
+        }
+
+        .table-view {
+            display: none;
+        }
+
+        .table-view.active {
+            display: block;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        thead {
+            background: #f3f4f6;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th {
+            padding: 12px 8px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #d1d5db;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+
+        th:hover {
+            background: #e5e7eb;
+        }
+
+        th.sortable::after {
+            content: ' ⇅';
+            opacity: 0.4;
+            font-size: 0.8em;
+        }
+
+        th.sort-asc::after {
+            content: ' ▲';
+            opacity: 1;
+        }
+
+        th.sort-desc::after {
+            content: ' ▼';
+            opacity: 1;
+        }
+
+        td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tr:hover {
+            background: #f9fafb;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-badge.exists {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-badge.missing,
+        .status-badge.potential {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .details-content {
+            font-size: 14px;
+        }
+
+        .details-content h3 {
+            margin-bottom: 15px;
+            color: #374151;
+            font-size: 18px;
+        }
+
+        .details-content .selected-combo {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border-left: 4px solid #0d9488;
+        }
+
+        .plan-list {
+            margin-top: 15px;
+        }
+
+        .plan-item {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            border-left: 3px solid #10b981;
+        }
+
+        .plan-item h4 {
+            color: #0d9488;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .plan-item p {
+            color: #6b7280;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .missing-message,
+        .potential-message {
+            background: #fef3c7;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .missing-message h4,
+        .potential-message h4 {
+            color: #92400e;
+            margin-bottom: 8px;
+        }
+
+        .missing-message p,
+        .potential-message p {
+            color: #78350f;
+            font-size: 13px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            background: #0d9488;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: #0f766e;
+        }
+
+        @media (max-width: 1200px) {
+            .content {
+                flex-direction: column;
+            }
+            .details-panel {
+                width: 100%;
+                border-left: none;
+                border-top: 1px solid #e5e7eb;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>HERDMind Session Plan Dashboard</h1>
+            <div class="stats-toggle collapsed" onclick="toggleStats()">
+                Summary Stats (Click to expand)
+            </div>
+            <div class="stats-bar" id="statsBar">
+                <div class="stat-card">
+                    <div class="stat-value" id="statTotal">100</div>
+                    <div class="stat-label">Total Combinations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statExisting">27</div>
+                    <div class="stat-label">Existing Plans</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statPotential">73</div>
+                    <div class="stat-label">Potential Plans</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statCoverage">27%</div>
+                    <div class="stat-label">Coverage</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="view-toggle">
+                <button class="active" onclick="switchView('grid')">Grid View</button>
+                <button onclick="switchView('table')">Spreadsheet View</button>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="main-panel">
+                <div class="grid-view active" id="gridView">
+                    <div class="grid-container" id="gridContainer"></div>
+                </div>
+                <div class="table-view" id="tableView">
+                    <div class="table-container">
+                        <table id="dataTable">
+                            <thead>
+                                <tr>
+                                    <th class="sortable" onclick="sortTable(0, 'number')">Row</th>
+                                    <th class="sortable" onclick="sortTable(1, 'string')">Plan Name</th>
+                                    <th class="sortable" onclick="sortTable(2, 'string')">Category</th>
+                                    <th class="sortable" onclick="sortTable(3, 'string')">Theme</th>
+                                    <th class="sortable" onclick="sortTable(4, 'string')">Props</th>
+                                    <th class="sortable" onclick="sortTable(5, 'boolean')">Status</th>
+                                    <th class="sortable" onclick="sortTable(6, 'number')">Count</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Side Panel -->
+        <div class="side-panel-backdrop" id="sidePanelBackdrop" onclick="closeSidePanel()"></div>
+        <div class="side-panel" id="sidePanel">
+            <div class="side-panel-header">
+                <h3>Details</h3>
+                <button class="close-btn" onclick="closeSidePanel()">&times;</button>
+            </div>
+            <div class="side-panel-content" id="sidePanelContent">
+                <p style="color: #6b7280;">Click on a combination to see details</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Embedded dashboard data (generated from dashboard_data.json)
+        // This allows the dashboard to work without a web server
+        const DASHBOARD_DATA_EMBEDDED = {
+        "stats": {
+                "total": 100,
+                "existing": 27,
+                "potential": 73,
+                "coverage": 27.0
+        },
+        "categories": [
+                "General Adult Population",
+                "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+                "Organizational Teams/Leaders",
+                "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+                "Youth & Young Adults"
+        ],
+        "themes": [
+                "Building Confidence & Self Esteem",
+                "Exploring Identity & Belonging",
+                "Finding Safety & Nervous System Regulation",
+                "Rediscovering Balance",
+                "Relational Dynamics (e.g. Trust, Boundaries etc)"
+        ],
+        "props": [
+                "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                "No Props Needed",
+                "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)"
+        ],
+        "combinations": [
+                {
+                        "row": 1,
+                        "category": "General Adult Population",
+                        "theme": "Building Confidence & Self Esteem",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": false,
+                        "planName": "Plan 1 - General Adult Population × Building Confidence & Self Esteem × Creative Tools (e.g.paint, cha...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 2,
+                        "category": "General Adult Population",
+                        "theme": "Building Confidence & Self Esteem",
+                        "props": "No Props Needed",
+                        "hasPlan": true,
+                        "planName": "Confident Presence",
+                        "plans": [
+                                {
+                                        "id": "105",
+                                        "name": "Confident Presence",
+                                        "description": "Participants are invited to explore confidence by noticing their embodied presence in relationship with horses, allowing awareness and self-trust to emerge through interaction.",
+                                        "focus": "Building Confidence"
+                                }
+                        ],
+                        "count": 1
+                },
+                {
+                        "row": 3,
+                        "category": "General Adult Population",
+                        "theme": "Building Confidence & Self Esteem",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": true,
+                        "planName": "Rolling Confidence",
+                        "plans": [
+                                {
+                                        "id": "108",
+                                        "name": "Rolling Confidence",
+                                        "description": "This session explores what support is needed to feel self-confident",
+                                        "focus": "Building Confidence and Self-Esteem"
+                                }
+                        ],
+                        "count": 1
+                },
+                {
+                        "row": 4,
+                        "category": "General Adult Population",
+                        "theme": "Building Confidence & Self Esteem",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": true,
+                        "planName": "Seen and Heard",
+                        "plans": [
+                                {
+                                        "id": "83",
+                                        "name": "Seen and Heard",
+                                        "description": "This session explores support that is needed to build confidence. ",
+                                        "focus": "Building Confidence"
+                                }
+                        ],
+                        "count": 1
+                },
+                {
+                        "row": 5,
+                        "category": "General Adult Population",
+                        "theme": "Exploring Identity & Belonging",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": false,
+                        "planName": "Plan 5 - General Adult Population × Exploring Identity & Belonging × Creative Tools (e.g.paint, cha...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 6,
+                        "category": "General Adult Population",
+                        "theme": "Exploring Identity & Belonging",
+                        "props": "No Props Needed",
+                        "hasPlan": true,
+                        "planName": "Belonging in The HERD",
+                        "plans": [
+                                {
+                                        "id": "106",
+                                        "name": "Belonging in The HERD",
+                                        "description": "Participants are invited to explore themes of identity and belonging through relational encounters with horses, noticing how presence, attention, and choice shape experiences of inclusion and self-expression.",
+                                        "focus": "Identity & Belonging"
+                                }
+                        ],
+                        "count": 1
+                },
+                {
+                        "row": 7,
+                        "category": "General Adult Population",
+                        "theme": "Exploring Identity & Belonging",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": false,
+                        "planName": "Plan 7 - General Adult Population × Exploring Identity & Belonging × Physical Tools (Pool noodles, ...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 8,
+                        "category": "General Adult Population",
+                        "theme": "Exploring Identity & Belonging",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": false,
+                        "planName": "Plan 8 - General Adult Population × Exploring Identity & Belonging × Sensory Tools (e.g. Aromathera...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 9,
+                        "category": "General Adult Population",
+                        "theme": "Finding Safety & Nervous System Regulation",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": true,
+                        "planName": "Artful HERD",
+                        "plans": [
+                                {
+                                        "id": "107",
+                                        "name": "Artful HERD",
+                                        "description": "Participants are invited to practice nervous system regulation by observing the horses closely and creating artwork that represents one aspect of equine regulation.",
+                                        "focus": "Nervous System Regulation"
+                                }
+                        ],
+                        "count": 1
+                },
+                {
+                        "row": 10,
+                        "category": "General Adult Population",
+                        "theme": "Finding Safety & Nervous System Regulation",
+                        "props": "No Props Needed",
+                        "hasPlan": false,
+                        "planName": "Plan 10 - General Adult Population × Finding Safety & Nervous System Regulation × No Props Needed...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 11,
+                        "category": "General Adult Population",
+                        "theme": "Finding Safety & Nervous System Regulation",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": false,
+                        "planName": "Plan 11 - General Adult Population × Finding Safety & Nervous System Regulation × Physical Tools (Pool noodles, ...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 12,
+                        "category": "General Adult Population",
+                        "theme": "Finding Safety & Nervous System Regulation",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": false,
+                        "planName": "Plan 12 - General Adult Population × Finding Safety & Nervous System Regulation × Sensory Tools (e.g. Aromathera...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 13,
+                        "category": "General Adult Population",
+                        "theme": "Rediscovering Balance",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": false,
+                        "planName": "Plan 13 - General Adult Population × Rediscovering Balance × Creative Tools (e.g.paint, cha...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 14,
+                        "category": "General Adult Population",
+                        "theme": "Rediscovering Balance",
+                        "props": "No Props Needed",
+                        "hasPlan": false,
+                        "planName": "Plan 14 - General Adult Population × Rediscovering Balance × No Props Needed...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 15,
+                        "category": "General Adult Population",
+                        "theme": "Rediscovering Balance",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": true,
+                        "planName": "Balancing Acts",
+                        "plans": [
+                                {
+                                        "id": "109",
+                                        "name": "Balancing Acts",
+                                        "description": "Participants are invited to explore balance by navigating physical challenges alongside horses, noticing what support is needed and what obstacles arise in the search for equilibrium in life.",
+                                        "focus": "Rediscovering Balance"
+                                }
+                        ],
+                        "count": 1
+                },
+                {
+                        "row": 16,
+                        "category": "General Adult Population",
+                        "theme": "Rediscovering Balance",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": false,
+                        "planName": "Plan 16 - General Adult Population × Rediscovering Balance × Sensory Tools (e.g. Aromathera...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 17,
+                        "category": "General Adult Population",
+                        "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": true,
+                        "planName": "Points of View",
+                        "plans": [
+                                {
+                                        "id": "84",
+                                        "name": "Points of View",
+                                        "description": "This session supports participants to increase their tolerance of differing perspectives",
+                                        "focus": "Increasing perspectives"
+                                }
+                        ],
+                        "count": 1
+                },
+                {
+                        "row": 18,
+                        "category": "General Adult Population",
+                        "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+                        "props": "No Props Needed",
+                        "hasPlan": true,
+                        "planName": "Matching Steps",
+                        "plans": [
+                                {
+                                        "id": "104",
+                                        "name": "Matching Steps",
+                                        "description": "This session incorporates mindfulness based practice in a creative way with horses. ",
+                                        "focus": "Focus, Patience, & Mindfulness"
+                                }
+                        ],
+                        "count": 1
+                },
+                {
+                        "row": 19,
+                        "category": "General Adult Population",
+                        "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": true,
+                        "planName": "Wild Card (+1 more)",
+                        "plans": [
+                                {
+                                        "id": "80",
+                                        "name": "Wild Card",
+                                        "description": "This session supports participants to get clear about what’s important to them",
+                                        "focus": "Boundaries, Priorities, Values"
+                                },
+                                {
+                                        "id": "79",
+                                        "name": "Favorite Spots",
+                                        "description": "This session focuses on communication between horses and humans and highlights choice, agency, and assumptions in the interactions",
+                                        "focus": "Boundaries, Communication, Reciprocity"
+                                }
+                        ],
+                        "count": 2
+                },
+                {
+                        "row": 20,
+                        "category": "General Adult Population",
+                        "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": false,
+                        "planName": "Plan 20 - General Adult Population × Relational Dynamics (e.g. Trust, Boundaries etc) × Sensory Tools (e.g. Aromathera...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 21,
+                        "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+                        "theme": "Building Confidence & Self Esteem",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": false,
+                        "planName": "Plan 21 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Building Confidence & Self Esteem × Creative Tools (e.g.paint, cha...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 22,
+                        "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+                        "theme": "Building Confidence & Self Esteem",
+                        "props": "No Props Needed",
+                        "hasPlan": false,
+                        "planName": "Plan 22 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Building Confidence & Self Esteem × No Props Needed...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 23,
+                        "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+                        "theme": "Building Confidence & Self Esteem",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": false,
+                        "planName": "Plan 23 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Building Confidence & Self Esteem × Physical Tools (Pool noodles, ...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 24,
+                        "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+                        "theme": "Building Confidence & Self Esteem",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": false,
+                        "planName": "Plan 24 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Building Confidence & Self Esteem × Sensory Tools (e.g. Aromathera...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 25,
+                        "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+                        "theme": "Exploring Identity & Belonging",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": false,
+                        "planName": "Plan 25 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Exploring Identity & Belonging × Creative Tools (e.g.paint, cha...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 26,
+                        "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+                        "theme": "Exploring Identity & Belonging",
+                        "props": "No Props Needed",
+                        "hasPlan": false,
+                        "planName": "Plan 26 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Exploring Identity & Belonging × No Props Needed...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 27,
+                        "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+                        "theme": "Exploring Identity & Belonging",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": false,
+                        "planName": "Plan 27 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Exploring Identity & Belonging × Physical Tools (Pool noodles, ...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 28,
+                        "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+                        "theme": "Exploring Identity & Belonging",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": false,
+                        "planName": "Plan 28 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Exploring Identity & Belonging × Sensory Tools (e.g. Aromathera...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 29,
+                        "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+                        "theme": "Finding Safety & Nervous System Regulation",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": false,
+                        "planName": "Plan 29 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Finding Safety & Nervous System Regulation × Creative Tools (e.g.paint, cha...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 30,
+                        "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+                        "theme": "Finding Safety & Nervous System Regulation",
+                        "props": "No Props Needed",
+                        "hasPlan": false,
+                        "planName": "Plan 30 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Finding Safety & Nervous System Regulation × No Props Needed...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 31,
+                        "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+                        "theme": "Finding Safety & Nervous System Regulation",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": false,
+                        "planName": "Plan 31 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Finding Safety & Nervous System Regulation × Physical Tools (Pool noodles, ...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 32,
+                        "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+                        "theme": "Finding Safety & Nervous System Regulation",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": false,
+                        "planName": "Plan 32 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Finding Safety & Nervous System Regulation × Sensory Tools (e.g. Aromathera...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 33,
+                        "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+                        "theme": "Rediscovering Balance",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": false,
+                        "planName": "Plan 33 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Rediscovering Balance × Creative Tools (e.g.paint, cha...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 34,
+                        "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+                        "theme": "Rediscovering Balance",
+                        "props": "No Props Needed",
+                        "hasPlan": true,
+                        "planName": "Reclaiming Breath and Space",
+                        "plans": [
+                                {
+                                        "id": "73",
+                                        "name": "Reclaiming Breath and Space",
+                                        "description": "This session creates a restorative space for participants to reconnect with their own needs. With no tasks or props, participants are invited to notice, feel, and reflect with the horses, exploring pause, stillness, and the permission to rest.",
+                                        "focus": "Self-Care & Restoration"
+                                }
+                        ],
+                        "count": 1
+                },
+                {
+                        "row": 35,
+                        "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+                        "theme": "Rediscovering Balance",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": true,
+                        "planName": "Steady Ground (+1 more)",
+                        "plans": [
+                                {
+                                        "id": "65",
+                                        "name": "Steady Ground",
+                                        "description": "This session explores ways to develop inner balance ",
+                                        "focus": "Finding Inner Balance in conflict"
+                                },
+                                {
+                                        "id": "60",
+                                        "name": "Carrying On",
+                                        "description": "This session helps participants to acknowledge when they need suipport through interactions with horses at liberty.",
+                                        "focus": "Asking for Support"
+                                }
+                        ],
+                        "count": 2
+                },
+                {
+                        "row": 36,
+                        "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+                        "theme": "Rediscovering Balance",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": true,
+                        "planName": "Holding What Was (+2 more)",
+                        "plans": [
+                                {
+                                        "id": "67",
+                                        "name": "Holding What Was",
+                                        "description": "This session invites participants to reflect on grief and loss with the support of horses. Participants are guided to create a ritual to support the grieving process.",
+                                        "focus": "Grief & Loss"
+                                },
+                                {
+                                        "id": "63",
+                                        "name": "Remembering Ourselves",
+                                        "description": "This self-care session combines aromatherapy and breathing techniques to ground and center participants.",
+                                        "focus": "Self-Care & Restoration"
+                                },
+                                {
+                                        "id": "57",
+                                        "name": "The Overflowing Bucket",
+                                        "description": "This session explores self-care and awareness through choices. Horses’ responses to different options highlight how preferences and boundaries support wellbeing.",
+                                        "focus": "Self-Care, Sensory Awareness, Choice, Nourishment, Boundaries"
+                                }
+                        ],
+                        "count": 3
+                },
+                {
+                        "row": 37,
+                        "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+                        "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": false,
+                        "planName": "Plan 37 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Relational Dynamics (e.g. Trust, Boundaries etc) × Creative Tools (e.g.paint, cha...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 38,
+                        "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+                        "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+                        "props": "No Props Needed",
+                        "hasPlan": false,
+                        "planName": "Plan 38 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Relational Dynamics (e.g. Trust, Boundaries etc) × No Props Needed...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 39,
+                        "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+                        "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": true,
+                        "planName": "Circles of Rest (+1 more)",
+                        "plans": [
+                                {
+                                        "id": "66",
+                                        "name": "Circles of Rest",
+                                        "description": "This session focuses on boundaries and self-care with the help of horses.",
+                                        "focus": "Self-Care/Burnout"
+                                },
+                                {
+                                        "id": "55",
+                                        "name": "Flexing Boundaries",
+                                        "description": "This session focuses on boundaries and trust in relationships. Participants practice noticing their comfort levels, setting limits, and exploring how boundaries support safety and connection through their interactions with horses.",
+                                        "focus": "Flexibility, Boundaries, Control, Adaptation"
+                                }
+                        ],
+                        "count": 2
+                },
+                {
+                        "row": 40,
+                        "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+                        "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": false,
+                        "planName": "Plan 40 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Relational Dynamics (e.g. Trust, Boundaries etc) × Sensory Tools (e.g. Aromathera...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 41,
+                        "category": "Organizational Teams/Leaders",
+                        "theme": "Building Confidence & Self Esteem",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": true,
+                        "planName": "Crossroads",
+                        "plans": [
+                                {
+                                        "id": "64",
+                                        "name": "Crossroads",
+                                        "description": "This session focuses on decision making through interactions with horses",
+                                        "focus": "Decision Making"
+                                }
+                        ],
+                        "count": 1
+                },
+                {
+                        "row": 42,
+                        "category": "Organizational Teams/Leaders",
+                        "theme": "Building Confidence & Self Esteem",
+                        "props": "No Props Needed",
+                        "hasPlan": false,
+                        "planName": "Plan 42 - Organizational Teams/Leaders × Building Confidence & Self Esteem × No Props Needed...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 43,
+                        "category": "Organizational Teams/Leaders",
+                        "theme": "Building Confidence & Self Esteem",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": false,
+                        "planName": "Plan 43 - Organizational Teams/Leaders × Building Confidence & Self Esteem × Physical Tools (Pool noodles, ...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 44,
+                        "category": "Organizational Teams/Leaders",
+                        "theme": "Building Confidence & Self Esteem",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": false,
+                        "planName": "Plan 44 - Organizational Teams/Leaders × Building Confidence & Self Esteem × Sensory Tools (e.g. Aromathera...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 45,
+                        "category": "Organizational Teams/Leaders",
+                        "theme": "Exploring Identity & Belonging",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": false,
+                        "planName": "Plan 45 - Organizational Teams/Leaders × Exploring Identity & Belonging × Creative Tools (e.g.paint, cha...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 46,
+                        "category": "Organizational Teams/Leaders",
+                        "theme": "Exploring Identity & Belonging",
+                        "props": "No Props Needed",
+                        "hasPlan": false,
+                        "planName": "Plan 46 - Organizational Teams/Leaders × Exploring Identity & Belonging × No Props Needed...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 47,
+                        "category": "Organizational Teams/Leaders",
+                        "theme": "Exploring Identity & Belonging",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": false,
+                        "planName": "Plan 47 - Organizational Teams/Leaders × Exploring Identity & Belonging × Physical Tools (Pool noodles, ...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 48,
+                        "category": "Organizational Teams/Leaders",
+                        "theme": "Exploring Identity & Belonging",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": false,
+                        "planName": "Plan 48 - Organizational Teams/Leaders × Exploring Identity & Belonging × Sensory Tools (e.g. Aromathera...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 49,
+                        "category": "Organizational Teams/Leaders",
+                        "theme": "Finding Safety & Nervous System Regulation",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": false,
+                        "planName": "Plan 49 - Organizational Teams/Leaders × Finding Safety & Nervous System Regulation × Creative Tools (e.g.paint, cha...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 50,
+                        "category": "Organizational Teams/Leaders",
+                        "theme": "Finding Safety & Nervous System Regulation",
+                        "props": "No Props Needed",
+                        "hasPlan": false,
+                        "planName": "Plan 50 - Organizational Teams/Leaders × Finding Safety & Nervous System Regulation × No Props Needed...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 51,
+                        "category": "Organizational Teams/Leaders",
+                        "theme": "Finding Safety & Nervous System Regulation",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": false,
+                        "planName": "Plan 51 - Organizational Teams/Leaders × Finding Safety & Nervous System Regulation × Physical Tools (Pool noodles, ...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 52,
+                        "category": "Organizational Teams/Leaders",
+                        "theme": "Finding Safety & Nervous System Regulation",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": false,
+                        "planName": "Plan 52 - Organizational Teams/Leaders × Finding Safety & Nervous System Regulation × Sensory Tools (e.g. Aromathera...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 53,
+                        "category": "Organizational Teams/Leaders",
+                        "theme": "Rediscovering Balance",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": false,
+                        "planName": "Plan 53 - Organizational Teams/Leaders × Rediscovering Balance × Creative Tools (e.g.paint, cha...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 54,
+                        "category": "Organizational Teams/Leaders",
+                        "theme": "Rediscovering Balance",
+                        "props": "No Props Needed",
+                        "hasPlan": false,
+                        "planName": "Plan 54 - Organizational Teams/Leaders × Rediscovering Balance × No Props Needed...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 55,
+                        "category": "Organizational Teams/Leaders",
+                        "theme": "Rediscovering Balance",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": true,
+                        "planName": "Balancing Acts",
+                        "plans": [
+                                {
+                                        "id": "61",
+                                        "name": "Balancing Acts",
+                                        "description": "This session invites participants to explore balance between demanding structure and allowing for flexibility in the workplace. ",
+                                        "focus": "Flexibility in Leadership"
+                                }
+                        ],
+                        "count": 1
+                },
+                {
+                        "row": 56,
+                        "category": "Organizational Teams/Leaders",
+                        "theme": "Rediscovering Balance",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": false,
+                        "planName": "Plan 56 - Organizational Teams/Leaders × Rediscovering Balance × Sensory Tools (e.g. Aromathera...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 57,
+                        "category": "Organizational Teams/Leaders",
+                        "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": false,
+                        "planName": "Plan 57 - Organizational Teams/Leaders × Relational Dynamics (e.g. Trust, Boundaries etc) × Creative Tools (e.g.paint, cha...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 58,
+                        "category": "Organizational Teams/Leaders",
+                        "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+                        "props": "No Props Needed",
+                        "hasPlan": false,
+                        "planName": "Plan 58 - Organizational Teams/Leaders × Relational Dynamics (e.g. Trust, Boundaries etc) × No Props Needed...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 59,
+                        "category": "Organizational Teams/Leaders",
+                        "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": true,
+                        "planName": "Leading Together (+2 more)",
+                        "plans": [
+                                {
+                                        "id": "77",
+                                        "name": "Leading Together",
+                                        "description": "This is a longer session that can be expanded over the course of 2-3 hours. Aimed at working with teams to help participants create shared vision and cohesion. ",
+                                        "focus": "Team Building & Leadership"
+                                },
+                                {
+                                        "id": "72",
+                                        "name": "The Strategic Line",
+                                        "description": "This session invites participants to explore strategy through anticipating potential obstacles while working with horses.",
+                                        "focus": "Strategy"
+                                },
+                                {
+                                        "id": "62",
+                                        "name": "Bunker Wars",
+                                        "description": "This session helps participants to navigate conflict",
+                                        "focus": "Navigating Conflict"
+                                }
+                        ],
+                        "count": 3
+                },
+                {
+                        "row": 60,
+                        "category": "Organizational Teams/Leaders",
+                        "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": false,
+                        "planName": "Plan 60 - Organizational Teams/Leaders × Relational Dynamics (e.g. Trust, Boundaries etc) × Sensory Tools (e.g. Aromathera...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 61,
+                        "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+                        "theme": "Building Confidence & Self Esteem",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": false,
+                        "planName": "Plan 61 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Building Confidence & Self Esteem × Creative Tools (e.g.paint, cha...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 62,
+                        "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+                        "theme": "Building Confidence & Self Esteem",
+                        "props": "No Props Needed",
+                        "hasPlan": false,
+                        "planName": "Plan 62 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Building Confidence & Self Esteem × No Props Needed...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 63,
+                        "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+                        "theme": "Building Confidence & Self Esteem",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": false,
+                        "planName": "Plan 63 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Building Confidence & Self Esteem × Physical Tools (Pool noodles, ...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 64,
+                        "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+                        "theme": "Building Confidence & Self Esteem",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": true,
+                        "planName": "Volume and Voice",
+                        "plans": [
+                                {
+                                        "id": "69",
+                                        "name": "Volume and Voice",
+                                        "description": "This session explores the themes of power and control through creative expressions in interactions with horses. ",
+                                        "focus": "Power & Control, Freedom & Choice"
+                                }
+                        ],
+                        "count": 1
+                },
+                {
+                        "row": 65,
+                        "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+                        "theme": "Exploring Identity & Belonging",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": true,
+                        "planName": "Expressions of Belonging",
+                        "plans": [
+                                {
+                                        "id": "54",
+                                        "name": "Expressions of Belonging",
+                                        "description": "This session invites participants to explore how they see themselves and how they belong using creative props to express themselves.",
+                                        "focus": "Identity, Belonging, Acceptance"
+                                }
+                        ],
+                        "count": 1
+                },
+                {
+                        "row": 66,
+                        "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+                        "theme": "Exploring Identity & Belonging",
+                        "props": "No Props Needed",
+                        "hasPlan": false,
+                        "planName": "Plan 66 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Exploring Identity & Belonging × No Props Needed...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 67,
+                        "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+                        "theme": "Exploring Identity & Belonging",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": false,
+                        "planName": "Plan 67 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Exploring Identity & Belonging × Physical Tools (Pool noodles, ...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 68,
+                        "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+                        "theme": "Exploring Identity & Belonging",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": true,
+                        "planName": "Rainbows & Ribbons (+1 more)",
+                        "plans": [
+                                {
+                                        "id": "75",
+                                        "name": "Rainbows & Ribbons",
+                                        "description": "This session supports exploration of identity and belonging Participants use multicolored ribbons to represent parts of themselves, their communities, and their connections while spending time with horses.",
+                                        "focus": "Identity & Belonging"
+                                },
+                                {
+                                        "id": "74",
+                                        "name": "Sounding Out",
+                                        "description": "This session invites connection through sound. Participants use bells, chimes, or soft drums with the horses present, creating rhythms that support memory, presence, and togetherness without pressure to talk.",
+                                        "focus": "Isolation/Belonging"
+                                }
+                        ],
+                        "count": 2
+                },
+                {
+                        "row": 69,
+                        "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+                        "theme": "Finding Safety & Nervous System Regulation",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": false,
+                        "planName": "Plan 69 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Finding Safety & Nervous System Regulation × Creative Tools (e.g.paint, cha...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 70,
+                        "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+                        "theme": "Finding Safety & Nervous System Regulation",
+                        "props": "No Props Needed",
+                        "hasPlan": true,
+                        "planName": "Finding Ground",
+                        "plans": [
+                                {
+                                        "id": "53",
+                                        "name": "Finding Ground",
+                                        "description": "This session helps participants to calm their nervous system. Practitioners guide participants to notice body signals, support grounding and nervous system regulation.",
+                                        "focus": "Increasing body awareness and feelings of safety "
+                                }
+                        ],
+                        "count": 1
+                },
+                {
+                        "row": 71,
+                        "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+                        "theme": "Finding Safety & Nervous System Regulation",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": true,
+                        "planName": "Trigger Points",
+                        "plans": [
+                                {
+                                        "id": "56",
+                                        "name": "Trigger Points",
+                                        "description": "This session helps participants to notice nervous system responses and offers regulation strategies. Through interactions with horses, participants can practice grounding strategies in a safe environment.",
+                                        "focus": "Identifying nervous system responses, Safety, Emotional Regulation"
+                                }
+                        ],
+                        "count": 1
+                },
+                {
+                        "row": 72,
+                        "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+                        "theme": "Finding Safety & Nervous System Regulation",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": true,
+                        "planName": "Roots and Radiance",
+                        "plans": [
+                                {
+                                        "id": "71",
+                                        "name": "Roots and Radiance",
+                                        "description": "This session explores anxiety through movement, observation, and sensory props. Participants choose how they want to engage with the space and the horses, building awareness of their voice, visibility, and choices.",
+                                        "focus": "Anxiety, Safety, and Power Dynamics"
+                                }
+                        ],
+                        "count": 1
+                },
+                {
+                        "row": 73,
+                        "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+                        "theme": "Rediscovering Balance",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": false,
+                        "planName": "Plan 73 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Rediscovering Balance × Creative Tools (e.g.paint, cha...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 74,
+                        "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+                        "theme": "Rediscovering Balance",
+                        "props": "No Props Needed",
+                        "hasPlan": false,
+                        "planName": "Plan 74 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Rediscovering Balance × No Props Needed...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 75,
+                        "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+                        "theme": "Rediscovering Balance",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": false,
+                        "planName": "Plan 75 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Rediscovering Balance × Physical Tools (Pool noodles, ...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 76,
+                        "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+                        "theme": "Rediscovering Balance",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": false,
+                        "planName": "Plan 76 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Rediscovering Balance × Sensory Tools (e.g. Aromathera...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 77,
+                        "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+                        "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": false,
+                        "planName": "Plan 77 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Relational Dynamics (e.g. Trust, Boundaries etc) × Creative Tools (e.g.paint, cha...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 78,
+                        "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+                        "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+                        "props": "No Props Needed",
+                        "hasPlan": false,
+                        "planName": "Plan 78 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Relational Dynamics (e.g. Trust, Boundaries etc) × No Props Needed...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 79,
+                        "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+                        "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": true,
+                        "planName": "Come With Me (+1 more)",
+                        "plans": [
+                                {
+                                        "id": "78",
+                                        "name": "Come With Me",
+                                        "description": "This is a longer session that can be expanded over the course of 2-3 hours. Aimed at working with families to help increase awareness of non-verbal communication.",
+                                        "focus": "Family/Group cohesion and communication skills"
+                                },
+                                {
+                                        "id": "70",
+                                        "name": "Freedom in Authenticity",
+                                        "description": "This session explores authenticity as a lived, whole-body experience. Through interactions with horses and creative props, participants notice where they hold back, where they open up, and how their sense of self shows up in relationship with others.",
+                                        "focus": "Authenticity, Vulnerability, & Safety"
+                                }
+                        ],
+                        "count": 2
+                },
+                {
+                        "row": 80,
+                        "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+                        "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": true,
+                        "planName": "Natural Resources (+2 more)",
+                        "plans": [
+                                {
+                                        "id": "68",
+                                        "name": "Natural Resources",
+                                        "description": "This session explores procrastination / impulsiveness with the help of horses.",
+                                        "focus": "Procrastination / Impulsiveness"
+                                },
+                                {
+                                        "id": "59",
+                                        "name": "Scents of Remembrance",
+                                        "description": "This session invites participants to reflect on grief and loss with the support of horses. Participants are guided to create a ritual to support the grieving process.",
+                                        "focus": "Grief & Loss"
+                                },
+                                {
+                                        "id": "58",
+                                        "name": "Threads of Connection",
+                                        "description": "This session explores attachment patterns through interactions with horses.",
+                                        "focus": "Attachment & Connection"
+                                }
+                        ],
+                        "count": 3
+                },
+                {
+                        "row": 81,
+                        "category": "Youth & Young Adults",
+                        "theme": "Building Confidence & Self Esteem",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": true,
+                        "planName": "Stories in Motion (+1 more)",
+                        "plans": [
+                                {
+                                        "id": "85",
+                                        "name": "Stories in Motion",
+                                        "description": "This session explores how stories are created and shared to improve literacy skills. ",
+                                        "focus": "Literacy"
+                                },
+                                {
+                                        "id": "81",
+                                        "name": "The Way Forward",
+                                        "description": "This session focuses on decision making through interactions with horses",
+                                        "focus": "Decision Making"
+                                }
+                        ],
+                        "count": 2
+                },
+                {
+                        "row": 82,
+                        "category": "Youth & Young Adults",
+                        "theme": "Building Confidence & Self Esteem",
+                        "props": "No Props Needed",
+                        "hasPlan": false,
+                        "planName": "Plan 82 - Youth & Young Adults × Building Confidence & Self Esteem × No Props Needed...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 83,
+                        "category": "Youth & Young Adults",
+                        "theme": "Building Confidence & Self Esteem",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": false,
+                        "planName": "Plan 83 - Youth & Young Adults × Building Confidence & Self Esteem × Physical Tools (Pool noodles, ...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 84,
+                        "category": "Youth & Young Adults",
+                        "theme": "Building Confidence & Self Esteem",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": false,
+                        "planName": "Plan 84 - Youth & Young Adults × Building Confidence & Self Esteem × Sensory Tools (e.g. Aromathera...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 85,
+                        "category": "Youth & Young Adults",
+                        "theme": "Exploring Identity & Belonging",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": false,
+                        "planName": "Plan 85 - Youth & Young Adults × Exploring Identity & Belonging × Creative Tools (e.g.paint, cha...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 86,
+                        "category": "Youth & Young Adults",
+                        "theme": "Exploring Identity & Belonging",
+                        "props": "No Props Needed",
+                        "hasPlan": false,
+                        "planName": "Plan 86 - Youth & Young Adults × Exploring Identity & Belonging × No Props Needed...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 87,
+                        "category": "Youth & Young Adults",
+                        "theme": "Exploring Identity & Belonging",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": true,
+                        "planName": "Woven Identity",
+                        "plans": [
+                                {
+                                        "id": "76",
+                                        "name": "Woven Identity",
+                                        "description": "This session supports exploration of identity and belonging Participants use multicolored ribbons to represent parts of themselves, their communities, and their connections while spending time with horses.",
+                                        "focus": "Identity & Belonging"
+                                }
+                        ],
+                        "count": 1
+                },
+                {
+                        "row": 88,
+                        "category": "Youth & Young Adults",
+                        "theme": "Exploring Identity & Belonging",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": false,
+                        "planName": "Plan 88 - Youth & Young Adults × Exploring Identity & Belonging × Sensory Tools (e.g. Aromathera...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 89,
+                        "category": "Youth & Young Adults",
+                        "theme": "Finding Safety & Nervous System Regulation",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": false,
+                        "planName": "Plan 89 - Youth & Young Adults × Finding Safety & Nervous System Regulation × Creative Tools (e.g.paint, cha...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 90,
+                        "category": "Youth & Young Adults",
+                        "theme": "Finding Safety & Nervous System Regulation",
+                        "props": "No Props Needed",
+                        "hasPlan": false,
+                        "planName": "Plan 90 - Youth & Young Adults × Finding Safety & Nervous System Regulation × No Props Needed...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 91,
+                        "category": "Youth & Young Adults",
+                        "theme": "Finding Safety & Nervous System Regulation",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": false,
+                        "planName": "Plan 91 - Youth & Young Adults × Finding Safety & Nervous System Regulation × Physical Tools (Pool noodles, ...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 92,
+                        "category": "Youth & Young Adults",
+                        "theme": "Finding Safety & Nervous System Regulation",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": false,
+                        "planName": "Plan 92 - Youth & Young Adults × Finding Safety & Nervous System Regulation × Sensory Tools (e.g. Aromathera...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 93,
+                        "category": "Youth & Young Adults",
+                        "theme": "Rediscovering Balance",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": false,
+                        "planName": "Plan 93 - Youth & Young Adults × Rediscovering Balance × Creative Tools (e.g.paint, cha...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 94,
+                        "category": "Youth & Young Adults",
+                        "theme": "Rediscovering Balance",
+                        "props": "No Props Needed",
+                        "hasPlan": false,
+                        "planName": "Plan 94 - Youth & Young Adults × Rediscovering Balance × No Props Needed...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 95,
+                        "category": "Youth & Young Adults",
+                        "theme": "Rediscovering Balance",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": false,
+                        "planName": "Plan 95 - Youth & Young Adults × Rediscovering Balance × Physical Tools (Pool noodles, ...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 96,
+                        "category": "Youth & Young Adults",
+                        "theme": "Rediscovering Balance",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": false,
+                        "planName": "Plan 96 - Youth & Young Adults × Rediscovering Balance × Sensory Tools (e.g. Aromathera...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 97,
+                        "category": "Youth & Young Adults",
+                        "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+                        "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+                        "hasPlan": false,
+                        "planName": "Plan 97 - Youth & Young Adults × Relational Dynamics (e.g. Trust, Boundaries etc) × Creative Tools (e.g.paint, cha...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 98,
+                        "category": "Youth & Young Adults",
+                        "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+                        "props": "No Props Needed",
+                        "hasPlan": false,
+                        "planName": "Plan 98 - Youth & Young Adults × Relational Dynamics (e.g. Trust, Boundaries etc) × No Props Needed...",
+                        "plans": [],
+                        "count": 0
+                },
+                {
+                        "row": 99,
+                        "category": "Youth & Young Adults",
+                        "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+                        "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+                        "hasPlan": true,
+                        "planName": "Balance in Conflict",
+                        "plans": [
+                                {
+                                        "id": "82",
+                                        "name": "Balance in Conflict",
+                                        "description": "This session explores ways to navigate conflict",
+                                        "focus": "Finding Inner balance in conflict"
+                                }
+                        ],
+                        "count": 1
+                },
+                {
+                        "row": 100,
+                        "category": "Youth & Young Adults",
+                        "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+                        "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+                        "hasPlan": false,
+                        "planName": "Plan 100 - Youth & Young Adults × Relational Dynamics (e.g. Trust, Boundaries etc) × Sensory Tools (e.g. Aromathera...",
+                        "plans": [],
+                        "count": 0
+                }
+        ]
+};
+        
+        let dashboardData = null;
+        let filteredData = null;
+        let selectedCombo = null;
+        let currentSortColumn = null;
+        let currentSortDirection = 'asc';
+
+        // Load data
+        function loadData() {
+            // Try embedded data first
+            if (DASHBOARD_DATA_EMBEDDED) {
+                dashboardData = DASHBOARD_DATA_EMBEDDED;
+                filteredData = dashboardData.combinations;
+                initializeDashboard();
+                return;
+            }
+            
+            // Fallback: Try to fetch from file (works with local server)
+            fetch('dashboard_data.json')
+                .then(response => response.json())
+                .then(data => {
+                    dashboardData = data;
+                    filteredData = dashboardData.combinations;
+                    initializeDashboard();
+                })
+                .catch(error => {
+                    console.error('Error loading data:', error);
+                    document.getElementById('detailsPanel').innerHTML = 
+                        '<h3>Error</h3><p>Could not load dashboard_data.json. Please run: python generate_dashboard_data.py<br>Then either:<br>1. Use a local web server (python -m http.server 8000), or<br>2. Run: python embed_data_in_html.py</p>';
+                });
+        }
+
+        function initializeDashboard() {
+            updateStats();
+            filteredData = dashboardData.combinations;
+            renderGrid();
+            renderTable();
+        }
+
+        function updateStats() {
+            const stats = dashboardData.stats;
+            document.getElementById('statTotal').textContent = stats.total;
+            document.getElementById('statExisting').textContent = stats.existing;
+            document.getElementById('statPotential').textContent = stats.potential;
+            document.getElementById('statCoverage').textContent = stats.coverage + '%';
+        }
+
+        function toggleStats() {
+            const statsBar = document.getElementById('statsBar');
+            const toggle = document.querySelector('.stats-toggle');
+            statsBar.classList.toggle('expanded');
+            toggle.classList.toggle('collapsed');
+        }
+
+        function renderGrid() {
+            const container = document.getElementById('gridContainer');
+            container.innerHTML = '';
+
+            // Group by category
+            const byCategory = {};
+            filteredData.forEach(combo => {
+                if (!byCategory[combo.category]) {
+                    byCategory[combo.category] = [];
+                }
+                byCategory[combo.category].push(combo);
+            });
+
+            Object.keys(byCategory).sort().forEach((category, index) => {
+                const section = document.createElement('div');
+                section.className = 'category-section';
+                
+                const title = document.createElement('div');
+                title.className = index === 0 ? 'category-title' : 'category-title collapsed';
+                title.textContent = category;
+                title.onclick = () => toggleCategory(title);
+                section.appendChild(title);
+
+                const content = document.createElement('div');
+                content.className = index === 0 ? 'category-content' : 'category-content collapsed';
+
+                // Create grid for each theme
+                dashboardData.themes.forEach(theme => {
+                    const themeGrid = document.createElement('div');
+                    themeGrid.className = 'theme-grid';
+
+                    // Theme header
+                    const themeHeader = document.createElement('div');
+                    themeHeader.className = 'theme-header';
+                    themeHeader.textContent = theme;
+                    themeGrid.appendChild(themeHeader);
+
+                    // Prop columns
+                    dashboardData.props.forEach(prop => {
+                        const combo = byCategory[category].find(c => 
+                            c.theme === theme && c.props === prop
+                        );
+
+                        if (combo) {
+                            const cell = document.createElement('div');
+                            cell.className = `grid-cell ${combo.hasPlan ? 'has-plan' : 'potential'}`;
+                            cell.onclick = () => showDetails(combo);
+                            
+                            if (combo.hasPlan) {
+                                // Display plan names instead of count
+                                if (combo.count === 1) {
+                                    cell.innerHTML = `<div class="plan-name">${combo.plans[0].name}</div>`;
+                                } else {
+                                    // Multiple plans - list all names
+                                    const planNames = combo.plans.map(p => `<div class="plan-name">${p.name}</div>`).join('');
+                                    cell.innerHTML = planNames;
+                                }
+                            } else {
+                                cell.innerHTML = `<div class="cell-label">Potential</div>`;
+                            }
+                            themeGrid.appendChild(cell);
+                        }
+                    });
+
+                    content.appendChild(themeGrid);
+                });
+
+                section.appendChild(content);
+                container.appendChild(section);
+            });
+        }
+
+        function toggleCategory(titleElement) {
+            const content = titleElement.nextElementSibling;
+            titleElement.classList.toggle('collapsed');
+            content.classList.toggle('collapsed');
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            // Use filteredData (which may be sorted)
+            filteredData.forEach(combo => {
+                const row = document.createElement('tr');
+                row.onclick = () => showDetails(combo);
+                row.style.cursor = 'pointer';
+
+                row.innerHTML = `
+                    <td>${combo.row}</td>
+                    <td><strong>${combo.planName}</strong></td>
+                    <td>${combo.category}</td>
+                    <td>${combo.theme}</td>
+                    <td>${combo.props}</td>
+                    <td>
+                        <span class="status-badge ${combo.hasPlan ? 'exists' : 'potential'}">
+                            ${combo.hasPlan ? 'Has Plan' : 'Potential Plan'}
+                        </span>
+                    </td>
+                    <td>${combo.count}</td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+        function sortTable(columnIndex, dataType) {
+            // Toggle direction if same column
+            if (currentSortColumn === columnIndex) {
+                currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSortColumn = columnIndex;
+                currentSortDirection = 'asc';
+            }
+
+            // Update header indicators
+            document.querySelectorAll('th').forEach(th => {
+                th.classList.remove('sort-asc', 'sort-desc');
+            });
+            
+            const headers = document.querySelectorAll('th');
+            headers[columnIndex].classList.add(currentSortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+
+            // Sort the data
+            filteredData.sort((a, b) => {
+                let valA, valB;
+                
+                switch(columnIndex) {
+                    case 0: // Row
+                        valA = a.row;
+                        valB = b.row;
+                        break;
+                    case 1: // Plan Name
+                        valA = a.planName.toLowerCase();
+                        valB = b.planName.toLowerCase();
+                        break;
+                    case 2: // Category
+                        valA = a.category.toLowerCase();
+                        valB = b.category.toLowerCase();
+                        break;
+                    case 3: // Theme
+                        valA = a.theme.toLowerCase();
+                        valB = b.theme.toLowerCase();
+                        break;
+                    case 4: // Props
+                        valA = a.props.toLowerCase();
+                        valB = b.props.toLowerCase();
+                        break;
+                    case 5: // Status
+                        valA = a.hasPlan ? 1 : 0;
+                        valB = b.hasPlan ? 1 : 0;
+                        break;
+                    case 6: // Count
+                        valA = a.count;
+                        valB = b.count;
+                        break;
+                }
+
+                if (dataType === 'number') {
+                    return currentSortDirection === 'asc' ? valA - valB : valB - valA;
+                } else {
+                    if (valA < valB) return currentSortDirection === 'asc' ? -1 : 1;
+                    if (valA > valB) return currentSortDirection === 'asc' ? 1 : -1;
+                    return 0;
+                }
+            });
+
+            renderTable();
+        }
+
+        function sortTable(columnIndex, dataType) {
+            // Toggle direction if same column
+            if (currentSortColumn === columnIndex) {
+                currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSortColumn = columnIndex;
+                currentSortDirection = 'asc';
+            }
+
+            // Update header indicators
+            document.querySelectorAll('th').forEach(th => {
+                th.classList.remove('sort-asc', 'sort-desc');
+            });
+            
+            const headers = document.querySelectorAll('th');
+            headers[columnIndex].classList.add(currentSortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+
+            // Sort the data
+            filteredData.sort((a, b) => {
+                let valA, valB;
+                
+                switch(columnIndex) {
+                    case 0: // Row
+                        valA = a.row;
+                        valB = b.row;
+                        break;
+                    case 1: // Plan Name
+                        valA = a.planName.toLowerCase();
+                        valB = b.planName.toLowerCase();
+                        break;
+                    case 2: // Category
+                        valA = a.category.toLowerCase();
+                        valB = b.category.toLowerCase();
+                        break;
+                    case 3: // Theme
+                        valA = a.theme.toLowerCase();
+                        valB = b.theme.toLowerCase();
+                        break;
+                    case 4: // Props
+                        valA = a.props.toLowerCase();
+                        valB = b.props.toLowerCase();
+                        break;
+                    case 5: // Status
+                        valA = a.hasPlan ? 1 : 0;
+                        valB = b.hasPlan ? 1 : 0;
+                        break;
+                    case 6: // Count
+                        valA = a.count;
+                        valB = b.count;
+                        break;
+                }
+
+                if (dataType === 'number') {
+                    return currentSortDirection === 'asc' ? valA - valB : valB - valA;
+                } else {
+                    if (valA < valB) return currentSortDirection === 'asc' ? -1 : 1;
+                    if (valA > valB) return currentSortDirection === 'asc' ? 1 : -1;
+                    return 0;
+                }
+            });
+
+            renderTable();
+        }
+
+        function generateSuggestions(combo) {
+            // Analyze all existing plans to generate suggestions
+            const allPlans = dashboardData.combinations
+                .filter(c => c.hasPlan)
+                .flatMap(c => c.plans);
+            
+            // Find similar plans based on theme, category, and props
+            const sameThemePlans = dashboardData.combinations
+                .filter(c => c.hasPlan && c.theme === combo.theme)
+                .flatMap(c => c.plans);
+            
+            const sameCategoryPlans = dashboardData.combinations
+                .filter(c => c.hasPlan && c.category === combo.category)
+                .flatMap(c => c.plans);
+            
+            const samePropPlans = dashboardData.combinations
+                .filter(c => c.hasPlan && c.props === combo.props)
+                .flatMap(c => c.plans);
+
+            // Generate suggestions
+            const suggestions = [];
+            
+            // Suggestion 1: Based on theme
+            if (sameThemePlans.length > 0) {
+                const examplePlan = sameThemePlans[0];
+                suggestions.push({
+                    title: `Theme-Based Suggestion (${combo.theme})`,
+                    description: `Consider adapting "${examplePlan.name}" for ${combo.category}. Focus: ${examplePlan.focus}. Adjust activities to use ${combo.props.toLowerCase()}.`
+                });
+            }
+            
+            // Suggestion 2: Based on category
+            if (sameCategoryPlans.length > 0) {
+                const examplePlan = sameCategoryPlans[0];
+                suggestions.push({
+                    title: `Category-Based Suggestion (${combo.category})`,
+                    description: `Draw inspiration from "${examplePlan.name}". Adapt the session structure to explore ${combo.theme.toLowerCase()} using ${combo.props.toLowerCase()}.`
+                });
+            }
+            
+            // Suggestion 3: General structure pattern
+            suggestions.push({
+                title: 'Recommended Session Structure',
+                description: `
+                    <strong>Arrival & Orientation:</strong> Welcome participants, introduce theme of ${combo.theme.toLowerCase()}<br>
+                    <strong>Engagement:</strong> Use ${combo.props.toLowerCase()} to facilitate horse-human interaction<br>
+                    <strong>Reflection:</strong> Guide participants to connect experience with ${combo.theme.toLowerCase()}<br>
+                    <strong>Closing:</strong> Invite sharing of insights specific to ${combo.category}
+                `
+            });
+
+            return suggestions;
+        }
+
+        function showDetails(combo) {
+            selectedCombo = combo;
+            const panel = document.getElementById('sidePanelContent');
+            const sidePanel = document.getElementById('sidePanel');
+            const backdrop = document.getElementById('sidePanelBackdrop');
+
+            let html = `
+                <div class="selected-combo">
+                    <strong>Category:</strong> ${combo.category}<br>
+                    <strong>Theme:</strong> ${combo.theme}<br>
+                    <strong>Props:</strong> ${combo.props}
+                </div>
+            `;
+
+            if (combo.hasPlan && combo.plans.length > 0) {
+                html += '<div class="plan-list">';
+                combo.plans.forEach(plan => {
+                    html += `
+                        <div class="plan-item">
+                            <h4>${plan.name}</h4>
+                            <p><strong>ID:</strong> ${plan.id}</p>
+                            ${plan.description ? `<p>${plan.description.substring(0, 150)}...</p>` : ''}
+                        </div>
+                    `;
+                });
+                html += '</div>';
+            } else {
+                // Generate suggestions for potential plan
+                const suggestions = generateSuggestions(combo);
+                
+                html += `
+                    <div class="potential-message">
+                        <h4>Potential Plan</h4>
+                        <p>This combination doesn't have a session plan yet. Here are some suggestions:</p>
+                    </div>
+                `;
+                
+                html += '<div class="suggestions-list" style="margin-top: 15px;">';
+                suggestions.forEach(suggestion => {
+                    html += `
+                        <div style="background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px; border-left: 3px solid #0d9488;">
+                            <h5 style="color: #0d9488; font-size: 13px; margin-bottom: 6px;">${suggestion.title}</h5>
+                            <p style="color: #6b7280; font-size: 12px; line-height: 1.5;">${suggestion.description}</p>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                
+                html += `<button class="btn" style="margin-top: 10px;">Create New Plan</button>`;
+            }
+
+            panel.innerHTML = html;
+            
+            // Show side panel with animation
+            sidePanel.classList.add('active');
+            backdrop.classList.add('active');
+        }
+
+        function closeSidePanel() {
+            const sidePanel = document.getElementById('sidePanel');
+            const backdrop = document.getElementById('sidePanelBackdrop');
+            sidePanel.classList.remove('active');
+            backdrop.classList.remove('active');
+        }
+
+        function switchView(view) {
+            document.querySelectorAll('.view-toggle button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            if (view === 'grid') {
+                document.getElementById('gridView').classList.add('active');
+                document.getElementById('tableView').classList.remove('active');
+            } else {
+                document.getElementById('gridView').classList.remove('active');
+                document.getElementById('tableView').classList.add('active');
+            }
+        }
+
+        // Load data on page load
+        loadData();
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,1291 @@
+{
+  "stats": {
+    "total": 100,
+    "existing": 27,
+    "missing": 73,
+    "coverage": 27.0
+  },
+  "categories": [
+    "General Adult Population",
+    "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+    "Organizational Teams/Leaders",
+    "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+    "Youth & Young Adults"
+  ],
+  "themes": [
+    "Building Confidence & Self Esteem",
+    "Exploring Identity & Belonging",
+    "Finding Safety & Nervous System Regulation",
+    "Rediscovering Balance",
+    "Relational Dynamics (e.g. Trust, Boundaries etc)"
+  ],
+  "props": [
+    "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+    "No Props Needed",
+    "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+    "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)"
+  ],
+  "combinations": [
+    {
+      "row": 1,
+      "category": "General Adult Population",
+      "theme": "Building Confidence & Self Esteem",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": false,
+      "planName": "Plan 1 - General Adult Population × Building Confidence & Self Esteem × Creative Tools (e.g.paint, cha...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 2,
+      "category": "General Adult Population",
+      "theme": "Building Confidence & Self Esteem",
+      "props": "No Props Needed",
+      "hasPlan": true,
+      "planName": "Confident Presence",
+      "plans": [
+        {
+          "id": "105",
+          "name": "Confident Presence",
+          "description": "Participants are invited to explore confidence by noticing their embodied presence in relationship with horses, allowing awareness and self-trust to emerge through interaction.",
+          "focus": "Building Confidence"
+        }
+      ],
+      "count": 1
+    },
+    {
+      "row": 3,
+      "category": "General Adult Population",
+      "theme": "Building Confidence & Self Esteem",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": true,
+      "planName": "Rolling Confidence",
+      "plans": [
+        {
+          "id": "108",
+          "name": "Rolling Confidence",
+          "description": "This session explores what support is needed to feel self-confident",
+          "focus": "Building Confidence and Self-Esteem"
+        }
+      ],
+      "count": 1
+    },
+    {
+      "row": 4,
+      "category": "General Adult Population",
+      "theme": "Building Confidence & Self Esteem",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": true,
+      "planName": "Seen and Heard",
+      "plans": [
+        {
+          "id": "83",
+          "name": "Seen and Heard",
+          "description": "This session explores support that is needed to build confidence. ",
+          "focus": "Building Confidence"
+        }
+      ],
+      "count": 1
+    },
+    {
+      "row": 5,
+      "category": "General Adult Population",
+      "theme": "Exploring Identity & Belonging",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": false,
+      "planName": "Plan 5 - General Adult Population × Exploring Identity & Belonging × Creative Tools (e.g.paint, cha...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 6,
+      "category": "General Adult Population",
+      "theme": "Exploring Identity & Belonging",
+      "props": "No Props Needed",
+      "hasPlan": true,
+      "planName": "Belonging in The HERD",
+      "plans": [
+        {
+          "id": "106",
+          "name": "Belonging in The HERD",
+          "description": "Participants are invited to explore themes of identity and belonging through relational encounters with horses, noticing how presence, attention, and choice shape experiences of inclusion and self-expression.",
+          "focus": "Identity & Belonging"
+        }
+      ],
+      "count": 1
+    },
+    {
+      "row": 7,
+      "category": "General Adult Population",
+      "theme": "Exploring Identity & Belonging",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": false,
+      "planName": "Plan 7 - General Adult Population × Exploring Identity & Belonging × Physical Tools (Pool noodles, ...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 8,
+      "category": "General Adult Population",
+      "theme": "Exploring Identity & Belonging",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": false,
+      "planName": "Plan 8 - General Adult Population × Exploring Identity & Belonging × Sensory Tools (e.g. Aromathera...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 9,
+      "category": "General Adult Population",
+      "theme": "Finding Safety & Nervous System Regulation",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": true,
+      "planName": "Artful HERD",
+      "plans": [
+        {
+          "id": "107",
+          "name": "Artful HERD",
+          "description": "Participants are invited to practice nervous system regulation by observing the horses closely and creating artwork that represents one aspect of equine regulation.",
+          "focus": "Nervous System Regulation"
+        }
+      ],
+      "count": 1
+    },
+    {
+      "row": 10,
+      "category": "General Adult Population",
+      "theme": "Finding Safety & Nervous System Regulation",
+      "props": "No Props Needed",
+      "hasPlan": false,
+      "planName": "Plan 10 - General Adult Population × Finding Safety & Nervous System Regulation × No Props Needed...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 11,
+      "category": "General Adult Population",
+      "theme": "Finding Safety & Nervous System Regulation",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": false,
+      "planName": "Plan 11 - General Adult Population × Finding Safety & Nervous System Regulation × Physical Tools (Pool noodles, ...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 12,
+      "category": "General Adult Population",
+      "theme": "Finding Safety & Nervous System Regulation",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": false,
+      "planName": "Plan 12 - General Adult Population × Finding Safety & Nervous System Regulation × Sensory Tools (e.g. Aromathera...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 13,
+      "category": "General Adult Population",
+      "theme": "Rediscovering Balance",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": false,
+      "planName": "Plan 13 - General Adult Population × Rediscovering Balance × Creative Tools (e.g.paint, cha...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 14,
+      "category": "General Adult Population",
+      "theme": "Rediscovering Balance",
+      "props": "No Props Needed",
+      "hasPlan": false,
+      "planName": "Plan 14 - General Adult Population × Rediscovering Balance × No Props Needed...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 15,
+      "category": "General Adult Population",
+      "theme": "Rediscovering Balance",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": true,
+      "planName": "Balancing Acts",
+      "plans": [
+        {
+          "id": "109",
+          "name": "Balancing Acts",
+          "description": "Participants are invited to explore balance by navigating physical challenges alongside horses, noticing what support is needed and what obstacles arise in the search for equilibrium in life.",
+          "focus": "Rediscovering Balance"
+        }
+      ],
+      "count": 1
+    },
+    {
+      "row": 16,
+      "category": "General Adult Population",
+      "theme": "Rediscovering Balance",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": false,
+      "planName": "Plan 16 - General Adult Population × Rediscovering Balance × Sensory Tools (e.g. Aromathera...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 17,
+      "category": "General Adult Population",
+      "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": true,
+      "planName": "Points of View",
+      "plans": [
+        {
+          "id": "84",
+          "name": "Points of View",
+          "description": "This session supports participants to increase their tolerance of differing perspectives",
+          "focus": "Increasing perspectives"
+        }
+      ],
+      "count": 1
+    },
+    {
+      "row": 18,
+      "category": "General Adult Population",
+      "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+      "props": "No Props Needed",
+      "hasPlan": true,
+      "planName": "Matching Steps",
+      "plans": [
+        {
+          "id": "104",
+          "name": "Matching Steps",
+          "description": "This session incorporates mindfulness based practice in a creative way with horses. ",
+          "focus": "Focus, Patience, & Mindfulness"
+        }
+      ],
+      "count": 1
+    },
+    {
+      "row": 19,
+      "category": "General Adult Population",
+      "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": true,
+      "planName": "Wild Card (+1 more)",
+      "plans": [
+        {
+          "id": "80",
+          "name": "Wild Card",
+          "description": "This session supports participants to get clear about what’s important to them",
+          "focus": "Boundaries, Priorities, Values"
+        },
+        {
+          "id": "79",
+          "name": "Favorite Spots",
+          "description": "This session focuses on communication between horses and humans and highlights choice, agency, and assumptions in the interactions",
+          "focus": "Boundaries, Communication, Reciprocity"
+        }
+      ],
+      "count": 2
+    },
+    {
+      "row": 20,
+      "category": "General Adult Population",
+      "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": false,
+      "planName": "Plan 20 - General Adult Population × Relational Dynamics (e.g. Trust, Boundaries etc) × Sensory Tools (e.g. Aromathera...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 21,
+      "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+      "theme": "Building Confidence & Self Esteem",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": false,
+      "planName": "Plan 21 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Building Confidence & Self Esteem × Creative Tools (e.g.paint, cha...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 22,
+      "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+      "theme": "Building Confidence & Self Esteem",
+      "props": "No Props Needed",
+      "hasPlan": false,
+      "planName": "Plan 22 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Building Confidence & Self Esteem × No Props Needed...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 23,
+      "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+      "theme": "Building Confidence & Self Esteem",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": false,
+      "planName": "Plan 23 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Building Confidence & Self Esteem × Physical Tools (Pool noodles, ...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 24,
+      "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+      "theme": "Building Confidence & Self Esteem",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": false,
+      "planName": "Plan 24 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Building Confidence & Self Esteem × Sensory Tools (e.g. Aromathera...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 25,
+      "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+      "theme": "Exploring Identity & Belonging",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": false,
+      "planName": "Plan 25 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Exploring Identity & Belonging × Creative Tools (e.g.paint, cha...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 26,
+      "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+      "theme": "Exploring Identity & Belonging",
+      "props": "No Props Needed",
+      "hasPlan": false,
+      "planName": "Plan 26 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Exploring Identity & Belonging × No Props Needed...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 27,
+      "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+      "theme": "Exploring Identity & Belonging",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": false,
+      "planName": "Plan 27 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Exploring Identity & Belonging × Physical Tools (Pool noodles, ...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 28,
+      "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+      "theme": "Exploring Identity & Belonging",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": false,
+      "planName": "Plan 28 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Exploring Identity & Belonging × Sensory Tools (e.g. Aromathera...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 29,
+      "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+      "theme": "Finding Safety & Nervous System Regulation",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": false,
+      "planName": "Plan 29 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Finding Safety & Nervous System Regulation × Creative Tools (e.g.paint, cha...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 30,
+      "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+      "theme": "Finding Safety & Nervous System Regulation",
+      "props": "No Props Needed",
+      "hasPlan": false,
+      "planName": "Plan 30 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Finding Safety & Nervous System Regulation × No Props Needed...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 31,
+      "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+      "theme": "Finding Safety & Nervous System Regulation",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": false,
+      "planName": "Plan 31 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Finding Safety & Nervous System Regulation × Physical Tools (Pool noodles, ...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 32,
+      "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+      "theme": "Finding Safety & Nervous System Regulation",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": false,
+      "planName": "Plan 32 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Finding Safety & Nervous System Regulation × Sensory Tools (e.g. Aromathera...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 33,
+      "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+      "theme": "Rediscovering Balance",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": false,
+      "planName": "Plan 33 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Rediscovering Balance × Creative Tools (e.g.paint, cha...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 34,
+      "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+      "theme": "Rediscovering Balance",
+      "props": "No Props Needed",
+      "hasPlan": true,
+      "planName": "Reclaiming Breath and Space",
+      "plans": [
+        {
+          "id": "73",
+          "name": "Reclaiming Breath and Space",
+          "description": "This session creates a restorative space for participants to reconnect with their own needs. With no tasks or props, participants are invited to notice, feel, and reflect with the horses, exploring pause, stillness, and the permission to rest.",
+          "focus": "Self-Care & Restoration"
+        }
+      ],
+      "count": 1
+    },
+    {
+      "row": 35,
+      "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+      "theme": "Rediscovering Balance",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": true,
+      "planName": "Steady Ground (+1 more)",
+      "plans": [
+        {
+          "id": "65",
+          "name": "Steady Ground",
+          "description": "This session explores ways to develop inner balance ",
+          "focus": "Finding Inner Balance in conflict"
+        },
+        {
+          "id": "60",
+          "name": "Carrying On",
+          "description": "This session helps participants to acknowledge when they need suipport through interactions with horses at liberty.",
+          "focus": "Asking for Support"
+        }
+      ],
+      "count": 2
+    },
+    {
+      "row": 36,
+      "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+      "theme": "Rediscovering Balance",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": true,
+      "planName": "Holding What Was (+2 more)",
+      "plans": [
+        {
+          "id": "67",
+          "name": "Holding What Was",
+          "description": "This session invites participants to reflect on grief and loss with the support of horses. Participants are guided to create a ritual to support the grieving process.",
+          "focus": "Grief & Loss"
+        },
+        {
+          "id": "63",
+          "name": "Remembering Ourselves",
+          "description": "This self-care session combines aromatherapy and breathing techniques to ground and center participants.",
+          "focus": "Self-Care & Restoration"
+        },
+        {
+          "id": "57",
+          "name": "The Overflowing Bucket",
+          "description": "This session explores self-care and awareness through choices. Horses’ responses to different options highlight how preferences and boundaries support wellbeing.",
+          "focus": "Self-Care, Sensory Awareness, Choice, Nourishment, Boundaries"
+        }
+      ],
+      "count": 3
+    },
+    {
+      "row": 37,
+      "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+      "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": false,
+      "planName": "Plan 37 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Relational Dynamics (e.g. Trust, Boundaries etc) × Creative Tools (e.g.paint, cha...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 38,
+      "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+      "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+      "props": "No Props Needed",
+      "hasPlan": false,
+      "planName": "Plan 38 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Relational Dynamics (e.g. Trust, Boundaries etc) × No Props Needed...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 39,
+      "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+      "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": true,
+      "planName": "Circles of Rest (+1 more)",
+      "plans": [
+        {
+          "id": "66",
+          "name": "Circles of Rest",
+          "description": "This session focuses on boundaries and self-care with the help of horses.",
+          "focus": "Self-Care/Burnout"
+        },
+        {
+          "id": "55",
+          "name": "Flexing Boundaries",
+          "description": "This session focuses on boundaries and trust in relationships. Participants practice noticing their comfort levels, setting limits, and exploring how boundaries support safety and connection through their interactions with horses.",
+          "focus": "Flexibility, Boundaries, Control, Adaptation"
+        }
+      ],
+      "count": 2
+    },
+    {
+      "row": 40,
+      "category": "Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers)",
+      "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": false,
+      "planName": "Plan 40 - Helpers (e.g., teachers, Healthcare workers, EMT, veterans, caregivers) × Relational Dynamics (e.g. Trust, Boundaries etc) × Sensory Tools (e.g. Aromathera...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 41,
+      "category": "Organizational Teams/Leaders",
+      "theme": "Building Confidence & Self Esteem",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": true,
+      "planName": "Crossroads",
+      "plans": [
+        {
+          "id": "64",
+          "name": "Crossroads",
+          "description": "This session focuses on decision making through interactions with horses",
+          "focus": "Decision Making"
+        }
+      ],
+      "count": 1
+    },
+    {
+      "row": 42,
+      "category": "Organizational Teams/Leaders",
+      "theme": "Building Confidence & Self Esteem",
+      "props": "No Props Needed",
+      "hasPlan": false,
+      "planName": "Plan 42 - Organizational Teams/Leaders × Building Confidence & Self Esteem × No Props Needed...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 43,
+      "category": "Organizational Teams/Leaders",
+      "theme": "Building Confidence & Self Esteem",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": false,
+      "planName": "Plan 43 - Organizational Teams/Leaders × Building Confidence & Self Esteem × Physical Tools (Pool noodles, ...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 44,
+      "category": "Organizational Teams/Leaders",
+      "theme": "Building Confidence & Self Esteem",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": false,
+      "planName": "Plan 44 - Organizational Teams/Leaders × Building Confidence & Self Esteem × Sensory Tools (e.g. Aromathera...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 45,
+      "category": "Organizational Teams/Leaders",
+      "theme": "Exploring Identity & Belonging",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": false,
+      "planName": "Plan 45 - Organizational Teams/Leaders × Exploring Identity & Belonging × Creative Tools (e.g.paint, cha...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 46,
+      "category": "Organizational Teams/Leaders",
+      "theme": "Exploring Identity & Belonging",
+      "props": "No Props Needed",
+      "hasPlan": false,
+      "planName": "Plan 46 - Organizational Teams/Leaders × Exploring Identity & Belonging × No Props Needed...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 47,
+      "category": "Organizational Teams/Leaders",
+      "theme": "Exploring Identity & Belonging",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": false,
+      "planName": "Plan 47 - Organizational Teams/Leaders × Exploring Identity & Belonging × Physical Tools (Pool noodles, ...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 48,
+      "category": "Organizational Teams/Leaders",
+      "theme": "Exploring Identity & Belonging",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": false,
+      "planName": "Plan 48 - Organizational Teams/Leaders × Exploring Identity & Belonging × Sensory Tools (e.g. Aromathera...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 49,
+      "category": "Organizational Teams/Leaders",
+      "theme": "Finding Safety & Nervous System Regulation",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": false,
+      "planName": "Plan 49 - Organizational Teams/Leaders × Finding Safety & Nervous System Regulation × Creative Tools (e.g.paint, cha...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 50,
+      "category": "Organizational Teams/Leaders",
+      "theme": "Finding Safety & Nervous System Regulation",
+      "props": "No Props Needed",
+      "hasPlan": false,
+      "planName": "Plan 50 - Organizational Teams/Leaders × Finding Safety & Nervous System Regulation × No Props Needed...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 51,
+      "category": "Organizational Teams/Leaders",
+      "theme": "Finding Safety & Nervous System Regulation",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": false,
+      "planName": "Plan 51 - Organizational Teams/Leaders × Finding Safety & Nervous System Regulation × Physical Tools (Pool noodles, ...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 52,
+      "category": "Organizational Teams/Leaders",
+      "theme": "Finding Safety & Nervous System Regulation",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": false,
+      "planName": "Plan 52 - Organizational Teams/Leaders × Finding Safety & Nervous System Regulation × Sensory Tools (e.g. Aromathera...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 53,
+      "category": "Organizational Teams/Leaders",
+      "theme": "Rediscovering Balance",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": false,
+      "planName": "Plan 53 - Organizational Teams/Leaders × Rediscovering Balance × Creative Tools (e.g.paint, cha...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 54,
+      "category": "Organizational Teams/Leaders",
+      "theme": "Rediscovering Balance",
+      "props": "No Props Needed",
+      "hasPlan": false,
+      "planName": "Plan 54 - Organizational Teams/Leaders × Rediscovering Balance × No Props Needed...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 55,
+      "category": "Organizational Teams/Leaders",
+      "theme": "Rediscovering Balance",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": true,
+      "planName": "Balancing Acts",
+      "plans": [
+        {
+          "id": "61",
+          "name": "Balancing Acts",
+          "description": "This session invites participants to explore balance between demanding structure and allowing for flexibility in the workplace. ",
+          "focus": "Flexibility in Leadership"
+        }
+      ],
+      "count": 1
+    },
+    {
+      "row": 56,
+      "category": "Organizational Teams/Leaders",
+      "theme": "Rediscovering Balance",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": false,
+      "planName": "Plan 56 - Organizational Teams/Leaders × Rediscovering Balance × Sensory Tools (e.g. Aromathera...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 57,
+      "category": "Organizational Teams/Leaders",
+      "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": false,
+      "planName": "Plan 57 - Organizational Teams/Leaders × Relational Dynamics (e.g. Trust, Boundaries etc) × Creative Tools (e.g.paint, cha...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 58,
+      "category": "Organizational Teams/Leaders",
+      "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+      "props": "No Props Needed",
+      "hasPlan": false,
+      "planName": "Plan 58 - Organizational Teams/Leaders × Relational Dynamics (e.g. Trust, Boundaries etc) × No Props Needed...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 59,
+      "category": "Organizational Teams/Leaders",
+      "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": true,
+      "planName": "Leading Together (+2 more)",
+      "plans": [
+        {
+          "id": "77",
+          "name": "Leading Together",
+          "description": "This is a longer session that can be expanded over the course of 2-3 hours. Aimed at working with teams to help participants create shared vision and cohesion. ",
+          "focus": "Team Building & Leadership"
+        },
+        {
+          "id": "72",
+          "name": "The Strategic Line",
+          "description": "This session invites participants to explore strategy through anticipating potential obstacles while working with horses.",
+          "focus": "Strategy"
+        },
+        {
+          "id": "62",
+          "name": "Bunker Wars",
+          "description": "This session helps participants to navigate conflict",
+          "focus": "Navigating Conflict"
+        }
+      ],
+      "count": 3
+    },
+    {
+      "row": 60,
+      "category": "Organizational Teams/Leaders",
+      "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": false,
+      "planName": "Plan 60 - Organizational Teams/Leaders × Relational Dynamics (e.g. Trust, Boundaries etc) × Sensory Tools (e.g. Aromathera...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 61,
+      "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+      "theme": "Building Confidence & Self Esteem",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": false,
+      "planName": "Plan 61 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Building Confidence & Self Esteem × Creative Tools (e.g.paint, cha...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 62,
+      "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+      "theme": "Building Confidence & Self Esteem",
+      "props": "No Props Needed",
+      "hasPlan": false,
+      "planName": "Plan 62 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Building Confidence & Self Esteem × No Props Needed...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 63,
+      "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+      "theme": "Building Confidence & Self Esteem",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": false,
+      "planName": "Plan 63 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Building Confidence & Self Esteem × Physical Tools (Pool noodles, ...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 64,
+      "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+      "theme": "Building Confidence & Self Esteem",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": true,
+      "planName": "Volume and Voice",
+      "plans": [
+        {
+          "id": "69",
+          "name": "Volume and Voice",
+          "description": "This session explores the themes of power and control through creative expressions in interactions with horses. ",
+          "focus": "Power & Control, Freedom & Choice"
+        }
+      ],
+      "count": 1
+    },
+    {
+      "row": 65,
+      "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+      "theme": "Exploring Identity & Belonging",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": true,
+      "planName": "Expressions of Belonging",
+      "plans": [
+        {
+          "id": "54",
+          "name": "Expressions of Belonging",
+          "description": "This session invites participants to explore how they see themselves and how they belong using creative props to express themselves.",
+          "focus": "Identity, Belonging, Acceptance"
+        }
+      ],
+      "count": 1
+    },
+    {
+      "row": 66,
+      "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+      "theme": "Exploring Identity & Belonging",
+      "props": "No Props Needed",
+      "hasPlan": false,
+      "planName": "Plan 66 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Exploring Identity & Belonging × No Props Needed...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 67,
+      "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+      "theme": "Exploring Identity & Belonging",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": false,
+      "planName": "Plan 67 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Exploring Identity & Belonging × Physical Tools (Pool noodles, ...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 68,
+      "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+      "theme": "Exploring Identity & Belonging",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": true,
+      "planName": "Rainbows & Ribbons (+1 more)",
+      "plans": [
+        {
+          "id": "75",
+          "name": "Rainbows & Ribbons",
+          "description": "This session supports exploration of identity and belonging Participants use multicolored ribbons to represent parts of themselves, their communities, and their connections while spending time with horses.",
+          "focus": "Identity & Belonging"
+        },
+        {
+          "id": "74",
+          "name": "Sounding Out",
+          "description": "This session invites connection through sound. Participants use bells, chimes, or soft drums with the horses present, creating rhythms that support memory, presence, and togetherness without pressure to talk.",
+          "focus": "Isolation/Belonging"
+        }
+      ],
+      "count": 2
+    },
+    {
+      "row": 69,
+      "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+      "theme": "Finding Safety & Nervous System Regulation",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": false,
+      "planName": "Plan 69 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Finding Safety & Nervous System Regulation × Creative Tools (e.g.paint, cha...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 70,
+      "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+      "theme": "Finding Safety & Nervous System Regulation",
+      "props": "No Props Needed",
+      "hasPlan": true,
+      "planName": "Finding Ground",
+      "plans": [
+        {
+          "id": "53",
+          "name": "Finding Ground",
+          "description": "This session helps participants to calm their nervous system. Practitioners guide participants to notice body signals, support grounding and nervous system regulation.",
+          "focus": "Increasing body awareness and feelings of safety "
+        }
+      ],
+      "count": 1
+    },
+    {
+      "row": 71,
+      "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+      "theme": "Finding Safety & Nervous System Regulation",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": true,
+      "planName": "Trigger Points",
+      "plans": [
+        {
+          "id": "56",
+          "name": "Trigger Points",
+          "description": "This session helps participants to notice nervous system responses and offers regulation strategies. Through interactions with horses, participants can practice grounding strategies in a safe environment.",
+          "focus": "Identifying nervous system responses, Safety, Emotional Regulation"
+        }
+      ],
+      "count": 1
+    },
+    {
+      "row": 72,
+      "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+      "theme": "Finding Safety & Nervous System Regulation",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": true,
+      "planName": "Roots and Radiance",
+      "plans": [
+        {
+          "id": "71",
+          "name": "Roots and Radiance",
+          "description": "This session explores anxiety through movement, observation, and sensory props. Participants choose how they want to engage with the space and the horses, building awareness of their voice, visibility, and choices.",
+          "focus": "Anxiety, Safety, and Power Dynamics"
+        }
+      ],
+      "count": 1
+    },
+    {
+      "row": 73,
+      "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+      "theme": "Rediscovering Balance",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": false,
+      "planName": "Plan 73 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Rediscovering Balance × Creative Tools (e.g.paint, cha...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 74,
+      "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+      "theme": "Rediscovering Balance",
+      "props": "No Props Needed",
+      "hasPlan": false,
+      "planName": "Plan 74 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Rediscovering Balance × No Props Needed...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 75,
+      "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+      "theme": "Rediscovering Balance",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": false,
+      "planName": "Plan 75 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Rediscovering Balance × Physical Tools (Pool noodles, ...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 76,
+      "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+      "theme": "Rediscovering Balance",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": false,
+      "planName": "Plan 76 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Rediscovering Balance × Sensory Tools (e.g. Aromathera...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 77,
+      "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+      "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": false,
+      "planName": "Plan 77 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Relational Dynamics (e.g. Trust, Boundaries etc) × Creative Tools (e.g.paint, cha...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 78,
+      "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+      "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+      "props": "No Props Needed",
+      "hasPlan": false,
+      "planName": "Plan 78 - Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.) × Relational Dynamics (e.g. Trust, Boundaries etc) × No Props Needed...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 79,
+      "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+      "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": true,
+      "planName": "Come With Me (+1 more)",
+      "plans": [
+        {
+          "id": "78",
+          "name": "Come With Me",
+          "description": "This is a longer session that can be expanded over the course of 2-3 hours. Aimed at working with families to help increase awareness of non-verbal communication.",
+          "focus": "Family/Group cohesion and communication skills"
+        },
+        {
+          "id": "70",
+          "name": "Freedom in Authenticity",
+          "description": "This session explores authenticity as a lived, whole-body experience. Through interactions with horses and creative props, participants notice where they hold back, where they open up, and how their sense of self shows up in relationship with others.",
+          "focus": "Authenticity, Vulnerability, & Safety"
+        }
+      ],
+      "count": 2
+    },
+    {
+      "row": 80,
+      "category": "Trauma Survivors &/or Marginalized Populations (e.g. BIPOC/LGBTQ+/Neurodivergent etc.)",
+      "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": true,
+      "planName": "Natural Resources (+2 more)",
+      "plans": [
+        {
+          "id": "68",
+          "name": "Natural Resources",
+          "description": "This session explores procrastination / impulsiveness with the help of horses.",
+          "focus": "Procrastination / Impulsiveness"
+        },
+        {
+          "id": "59",
+          "name": "Scents of Remembrance",
+          "description": "This session invites participants to reflect on grief and loss with the support of horses. Participants are guided to create a ritual to support the grieving process.",
+          "focus": "Grief & Loss"
+        },
+        {
+          "id": "58",
+          "name": "Threads of Connection",
+          "description": "This session explores attachment patterns through interactions with horses.",
+          "focus": "Attachment & Connection"
+        }
+      ],
+      "count": 3
+    },
+    {
+      "row": 81,
+      "category": "Youth & Young Adults",
+      "theme": "Building Confidence & Self Esteem",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": true,
+      "planName": "Stories in Motion (+1 more)",
+      "plans": [
+        {
+          "id": "85",
+          "name": "Stories in Motion",
+          "description": "This session explores how stories are created and shared to improve literacy skills. ",
+          "focus": "Literacy"
+        },
+        {
+          "id": "81",
+          "name": "The Way Forward",
+          "description": "This session focuses on decision making through interactions with horses",
+          "focus": "Decision Making"
+        }
+      ],
+      "count": 2
+    },
+    {
+      "row": 82,
+      "category": "Youth & Young Adults",
+      "theme": "Building Confidence & Self Esteem",
+      "props": "No Props Needed",
+      "hasPlan": false,
+      "planName": "Plan 82 - Youth & Young Adults × Building Confidence & Self Esteem × No Props Needed...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 83,
+      "category": "Youth & Young Adults",
+      "theme": "Building Confidence & Self Esteem",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": false,
+      "planName": "Plan 83 - Youth & Young Adults × Building Confidence & Self Esteem × Physical Tools (Pool noodles, ...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 84,
+      "category": "Youth & Young Adults",
+      "theme": "Building Confidence & Self Esteem",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": false,
+      "planName": "Plan 84 - Youth & Young Adults × Building Confidence & Self Esteem × Sensory Tools (e.g. Aromathera...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 85,
+      "category": "Youth & Young Adults",
+      "theme": "Exploring Identity & Belonging",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": false,
+      "planName": "Plan 85 - Youth & Young Adults × Exploring Identity & Belonging × Creative Tools (e.g.paint, cha...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 86,
+      "category": "Youth & Young Adults",
+      "theme": "Exploring Identity & Belonging",
+      "props": "No Props Needed",
+      "hasPlan": false,
+      "planName": "Plan 86 - Youth & Young Adults × Exploring Identity & Belonging × No Props Needed...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 87,
+      "category": "Youth & Young Adults",
+      "theme": "Exploring Identity & Belonging",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": true,
+      "planName": "Woven Identity",
+      "plans": [
+        {
+          "id": "76",
+          "name": "Woven Identity",
+          "description": "This session supports exploration of identity and belonging Participants use multicolored ribbons to represent parts of themselves, their communities, and their connections while spending time with horses.",
+          "focus": "Identity & Belonging"
+        }
+      ],
+      "count": 1
+    },
+    {
+      "row": 88,
+      "category": "Youth & Young Adults",
+      "theme": "Exploring Identity & Belonging",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": false,
+      "planName": "Plan 88 - Youth & Young Adults × Exploring Identity & Belonging × Sensory Tools (e.g. Aromathera...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 89,
+      "category": "Youth & Young Adults",
+      "theme": "Finding Safety & Nervous System Regulation",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": false,
+      "planName": "Plan 89 - Youth & Young Adults × Finding Safety & Nervous System Regulation × Creative Tools (e.g.paint, cha...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 90,
+      "category": "Youth & Young Adults",
+      "theme": "Finding Safety & Nervous System Regulation",
+      "props": "No Props Needed",
+      "hasPlan": false,
+      "planName": "Plan 90 - Youth & Young Adults × Finding Safety & Nervous System Regulation × No Props Needed...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 91,
+      "category": "Youth & Young Adults",
+      "theme": "Finding Safety & Nervous System Regulation",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": false,
+      "planName": "Plan 91 - Youth & Young Adults × Finding Safety & Nervous System Regulation × Physical Tools (Pool noodles, ...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 92,
+      "category": "Youth & Young Adults",
+      "theme": "Finding Safety & Nervous System Regulation",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": false,
+      "planName": "Plan 92 - Youth & Young Adults × Finding Safety & Nervous System Regulation × Sensory Tools (e.g. Aromathera...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 93,
+      "category": "Youth & Young Adults",
+      "theme": "Rediscovering Balance",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": false,
+      "planName": "Plan 93 - Youth & Young Adults × Rediscovering Balance × Creative Tools (e.g.paint, cha...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 94,
+      "category": "Youth & Young Adults",
+      "theme": "Rediscovering Balance",
+      "props": "No Props Needed",
+      "hasPlan": false,
+      "planName": "Plan 94 - Youth & Young Adults × Rediscovering Balance × No Props Needed...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 95,
+      "category": "Youth & Young Adults",
+      "theme": "Rediscovering Balance",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": false,
+      "planName": "Plan 95 - Youth & Young Adults × Rediscovering Balance × Physical Tools (Pool noodles, ...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 96,
+      "category": "Youth & Young Adults",
+      "theme": "Rediscovering Balance",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": false,
+      "planName": "Plan 96 - Youth & Young Adults × Rediscovering Balance × Sensory Tools (e.g. Aromathera...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 97,
+      "category": "Youth & Young Adults",
+      "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+      "props": "Creative Tools (e.g.paint, chalk, journaling, crafts)",
+      "hasPlan": false,
+      "planName": "Plan 97 - Youth & Young Adults × Relational Dynamics (e.g. Trust, Boundaries etc) × Creative Tools (e.g.paint, cha...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 98,
+      "category": "Youth & Young Adults",
+      "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+      "props": "No Props Needed",
+      "hasPlan": false,
+      "planName": "Plan 98 - Youth & Young Adults × Relational Dynamics (e.g. Trust, Boundaries etc) × No Props Needed...",
+      "plans": [],
+      "count": 0
+    },
+    {
+      "row": 99,
+      "category": "Youth & Young Adults",
+      "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+      "props": "Physical Tools (Pool noodles, cones, ground poles, halter, lead rope, buckets)",
+      "hasPlan": true,
+      "planName": "Balance in Conflict",
+      "plans": [
+        {
+          "id": "82",
+          "name": "Balance in Conflict",
+          "description": "This session explores ways to navigate conflict",
+          "focus": "Finding Inner balance in conflict"
+        }
+      ],
+      "count": 1
+    },
+    {
+      "row": 100,
+      "category": "Youth & Young Adults",
+      "theme": "Relational Dynamics (e.g. Trust, Boundaries etc)",
+      "props": "Sensory Tools (e.g. Aromatherapy, sound makers, soft toys/fidgets, grooming brushes etc)",
+      "hasPlan": false,
+      "planName": "Plan 100 - Youth & Young Adults × Relational Dynamics (e.g. Trust, Boundaries etc) × Sensory Tools (e.g. Aromathera...",
+      "plans": [],
+      "count": 0
+    }
+  ]
+}
