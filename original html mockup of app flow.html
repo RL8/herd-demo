@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HERDMind® Session Planner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a1a; /* Dark background to make the tablet view pop */
+        }
+
+        /* Custom scrollbar for the tablet screen */
+        .tablet-screen::-webkit-scrollbar {
+            width: 6px;
+        }
+        .tablet-screen::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        .tablet-screen::-webkit-scrollbar-thumb {
+            background: #ccc; 
+            border-radius: 3px;
+        }
+        .tablet-screen::-webkit-scrollbar-thumb:hover {
+            background: #0d9488; 
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .brand-color {
+            color: #0d9488;
+        }
+        .bg-brand {
+            background-color: #0d9488;
+        }
+        .border-brand {
+            border-color: #0d9488;
+        }
+        
+        /* Simulating the card/tablet look */
+        .device-frame {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            max-width: 900px;
+            margin: 20px auto;
+            border-radius: 24px;
+            overflow: hidden;
+            background: white;
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <!-- Device Frame -->
+    <div class="device-frame w-full relative">
+        
+        <!-- Status Bar Mockup -->
+        <div class="bg-white border-b border-gray-100 p-2 flex justify-between items-center text-xs text-gray-500 px-6">
+            <span>9:41 AM</span>
+            <div class="flex gap-2">
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <!-- App Header (Persistent across some screens) -->
+        <div id="app-header" class="bg-white p-4 border-b border-gray-100 flex justify-between items-center hidden">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-teal-600 flex items-center justify-center text-white font-bold text-xs">HM</div>
+                <span class="font-semibold text-gray-700">HERDMind®</span>
+            </div>
+            <button class="text-gray-400 hover:text-gray-600"><i class="fas fa-bars"></i></button>
+        </div>
+
+        <!-- Main Content Area -->
+        <div id="main-content" class="tablet-screen flex-1 overflow-y-auto relative bg-gray-50">
+            
+            <!-- SCREEN 1: INTRO MODAL -->
+            <div id="screen-intro" class="p-8 flex flex-col items-center justify-center min-h-full fade-in">
+                <div class="bg-white rounded-2xl shadow-xl p-8 max-w-2xl w-full border border-gray-100">
+                    <div class="flex justify-end mb-2">
+                        <button class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
+                    </div>
+                    
+                    <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">HOW TO USE THE SESSION PLANS</h1>
+                    
+                    <div class="space-y-4 text-gray-600 text-sm leading-relaxed">
+                        <p>At HERDMind®, we believe that each equine facilitated session is a unique unfolding between the horses and humans present. We truly believe that "It's not about the activity" - the creator of HERDMind, Dr. Veronica Lac, even wrote a book all about that! So, why have we developed this session plan generator?</p>
+                        
+                        <p>We recognize that even the most seasoned practitioner might need some help to think creatively in sessions. We also hear from new practitioners asking for help to get them started with ideas for different client populations.</p>
+                        
+                        <p>All of the session plans that our generator creates are designed using The HERD Institute Model™ as a foundation, so you can adapt, flex, and modify each session however you want to meet the needs of your specific client population. They are tried and tested sessions curated by our faculty members and not AI generated. All sessions incorporate our equine partners in a compassionate and relational way, and encourages practitioners to allow for freedom, choice, and agency of their equine friends.</p>
+                        
+                        <p class="font-medium text-teal-700">These sessions are NOT designed for you to follow step-by-step as tasks to complete. Instead, they offer a broad framework of ideas for you to take and make them your own.</p>
+                        
+                        <p>Each session begins by assuming that you have already covered the basics of safety and confidentiality in your session.</p>
+                        
+                        <p class="italic text-gray-500">Have some ideas of your own? Feel free to share a session plan with us in our discussion forum!</p>
+                    </div>
+
+                    <div class="mt-8 flex flex-col items-center gap-4">
+                        <label class="flex items-center gap-2 text-sm text-gray-500 cursor-pointer select-none">
+                            <input type="checkbox" class="w-4 h-4 text-teal-600 rounded border-gray-300 focus:ring-teal-500">
+                            Don't show this message again
+                        </label>
+                        
+                        <button onclick="goToScreen('form')" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition-colors w-full sm:w-auto">
+                            <i class="fas fa-undo mr-2"></i> CREATE SESSION PLAN
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCREEN 2: CREATE SESSION FORM -->
+            <div id="screen-form" class="hidden min-h-full flex flex-col p-6 max-w-2xl mx-auto fade-in">
+                <div class="flex-1 flex flex-col justify-center">
+                    <div class="w-16 h-16 bg-teal-600 rounded-full flex items-center justify-center text-white text-xl font-bold mb-6 mx-auto shadow-lg">
+                        HM
+                    </div>
+                    
+                    <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">Let's Create Your Session Plan</h2>
+                    <p class="text-center text-gray-500 mb-8 text-sm">Tell us a few details about your session and HERDMind will build a session plan for you, complete with facilitator tips.</p>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-5">
+                        <!-- Input 1 -->
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">What is your scope of practice?</label>
+                            <select id="input-scope" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-gray-700 text-sm">
+                                <option value="" disabled selected>Select session type...</option>
+                                <option value="psychotherapy">Psychotherapy/Counseling Incorporating Equines</option>
+                                <option value="coaching">Coaching/Education Incorporating Equines</option>
+                            </select>
+                        </div>
+
+                        <!-- Input 2 -->
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">Who is the session for?</label>
+                            <select id="input-who" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-gray-700 text-sm">
+                                <option value="" disabled selected>Select client category...</option>
+                                <option value="org-teams">Organizational Teams/Leaders</option>
+                                <option value="individuals">Individuals</option>
+                                <option value="groups">Groups</option>
+                            </select>
+                        </div>
+
+                        <!-- Input 3 -->
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">Want to include props?</label>
+                            <select id="input-props" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-gray-700 text-sm">
+                                <option value="" disabled selected>Select prop type...</option>
+                                <option value="physical">Physical Tools (Pool noodles, cones, ground poles...)</option>
+                                <option value="natural">Natural Objects</option>
+                                <option value="none">No Props</option>
+                            </select>
+                        </div>
+
+                        <!-- Input 4 -->
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">General Session Theme?</label>
+                            <select id="input-theme" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-gray-700 text-sm">
+                                <option value="" disabled selected>Select a theme...</option>
+                                <option value="identity">Exploring Identity & Belonging</option>
+                                <option value="leadership">Leadership & Communication</option>
+                                <option value="boundaries">Boundaries & Safety</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <button id="btn-autofill" class="text-xs text-teal-600 hover:underline mb-4" onclick="autoFillForm()">[Demo: Auto-fill Form]</button>
+                    </div>
+
+                    <button id="btn-form-next" onclick="goToScreen('selection')" disabled class="w-full bg-gray-300 text-white font-bold py-3 px-4 rounded-lg transition-colors cursor-not-allowed mt-2">
+                        NEXT
+                    </button>
+                </div>
+            </div>
+
+            <!-- SCREEN 3: SESSION SELECTION -->
+            <div id="screen-selection" class="hidden min-h-full flex flex-col p-6 fade-in">
+                <div class="text-center mb-8 pt-4">
+                    <h2 class="text-teal-700 font-bold tracking-widest text-sm mb-1 uppercase">Shared Wisdom. Collective Purpose.</h2>
+                </div>
+
+                <div class="flex gap-2 justify-center mb-8">
+                    <button class="bg-white border border-gray-300 text-gray-600 text-xs py-1 px-3 rounded-full hover:bg-gray-50">HOW TO USE SESSION PLANS</button>
+                    <button onclick="goToScreen('form')" class="bg-teal-600 text-white text-xs py-1 px-3 rounded-full hover:bg-teal-700"><i class="fas fa-arrow-left mr-1"></i> BACK</button>
+                    <button class="bg-teal-600 text-white text-xs py-1 px-3 rounded-full hover:bg-teal-700"><i class="fas fa-undo mr-1"></i> CREATE NEW PLAN</button>
+                </div>
+
+                <h3 class="text-center text-gray-700 font-bold mb-6">CHECK OUT YOUR SESSION PLANS!</h3>
+
+                <!-- Result Card -->
+                <div onclick="goToScreen('plan')" class="bg-gray-100 rounded-xl p-6 cursor-pointer hover:bg-gray-200 transition-colors border-l-4 border-teal-500 shadow-sm flex justify-between items-center group">
+                    <div>
+                        <h4 class="text-lg font-bold text-gray-800">Woven Identity</h4>
+                        <p class="text-sm text-gray-500 mt-1">Specific Focus: <span class="text-gray-700 font-medium">Identity & Belonging</span></p>
+                    </div>
+                    <div class="text-teal-600 group-hover:translate-x-1 transition-transform">
+                        <i class="fas fa-arrow-right text-xl"></i>
+                    </div>
+                </div>
+                
+                <div class="mt-4 opacity-50">
+                    <!-- Placeholder for potential other cards -->
+                    <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 flex justify-between items-center">
+                        <div class="h-4 w-32 bg-gray-200 rounded"></div>
+                        <div class="h-4 w-4 bg-gray-200 rounded"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCREEN 4: DETAILED PLAN -->
+            <div id="screen-plan" class="hidden fade-in pb-24"> <!-- Extra padding for footer -->
+                
+                <!-- Nav Bar -->
+                <div class="sticky top-0 bg-white z-10 px-4 py-3 shadow-sm flex justify-between items-center">
+                    <button onclick="goToScreen('selection')" class="bg-teal-600 text-white text-xs py-1 px-3 rounded-md hover:bg-teal-700">
+                        <i class="fas fa-arrow-left mr-1"></i> BACK
+                    </button>
+                    <div class="flex gap-2">
+                        <button class="bg-teal-600 text-white text-xs py-1 px-3 rounded-md hover:bg-teal-700 flex items-center">
+                            <i class="fas fa-undo mr-1"></i> NEW PLAN
+                        </button>
+                        <button class="text-gray-400 hover:text-teal-600"><i class="far fa-heart"></i></button>
+                    </div>
+                </div>
+
+                <div class="p-6 max-w-3xl mx-auto space-y-6">
+                    
+                    <!-- Title Section -->
+                    <div class="text-center mb-6">
+                        <h1 class="text-2xl font-bold text-gray-800">Woven Identity</h1>
+                        <p class="text-sm text-gray-500 mt-1">Session Focus:</p>
+                        <p class="font-medium text-gray-800">Identity & Belonging</p>
+                    </div>
+
+                    <!-- Materials Card -->
+                    <div class="bg-teal-50 border border-teal-100 rounded-xl p-5 shadow-sm">
+                        <div class="flex flex-col items-center text-center">
+                            <i class="fas fa-search text-teal-600 text-xl mb-2"></i>
+                            <h3 class="font-bold text-gray-800 text-sm mb-2">Materials Needed:</h3>
+                            <p class="font-medium text-gray-700 text-sm">Multicolored ribbons, markers/pens</p>
+                            <hr class="w-full border-teal-200 my-3">
+                            <p class="text-sm text-gray-600 leading-relaxed">
+                                This session supports exploration of identity and belonging. Participants use multicolored ribbons to represent parts of themselves, their communities, and their connections while spending time with horses.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Objectives Card -->
+                    <div class="bg-teal-50 border border-teal-100 rounded-xl p-5 shadow-sm">
+                        <div class="flex flex-col items-center text-center">
+                            <i class="fas fa-tasks text-teal-600 text-xl mb-2"></i>
+                            <h3 class="font-bold text-gray-800 text-sm mb-2">Session Objectives</h3>
+                            <div class="text-left text-sm text-gray-600 space-y-2">
+                                <p>1. Choose and express parts of identity using simple symbolic materials.</p>
+                                <p>2. Experience self-directed movement and choice of space as affirming ways to be present.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Details Card -->
+                    <div class="bg-teal-50 border border-teal-100 rounded-xl p-5 shadow-sm">
+                        <div class="flex flex-col items-center text-center mb-4">
+                            <i class="far fa-file-alt text-teal-600 text-xl mb-2"></i>
+                            <h3 class="font-bold text-gray-800 text-sm">Session Details</h3>
+                        </div>
+                        <div class="text-sm text-gray-600 space-y-4 leading-relaxed text-justify">
+                            <p>The session begins with participants choosing from a variety of multicolored ribbons. They may hold, wear, or tie their ribbons together to create a larger item.</p>
+                            <p>The facilitator introduces the idea of identity as layered and changing, and as something that belongs to each person. Participants then carry their ribbons into the pasture or arena where horses are at liberty.</p>
+                            <p>Participants move through the space in their own way, choosing to connect with horses, other participants, or remain on their own. The facilitator invites reflection on comfort, expression, and being seen. Reflective prompts may include, "How might your ribbons help you to connect with others - horses and humans?"</p>
+                            <p>Horses may approach at their own pace. Participants notice moments of connection/disconnection and reflect on how these experiences relate to feeling included or excluded in their lives.</p>
+                            <p>The session ends in circle, where participants may share one thing they learned about themselves in their interactions with the horses.</p>
+                        </div>
+                    </div>
+
+                    <!-- Welfare Card -->
+                    <div class="bg-teal-50 border border-teal-100 rounded-xl p-5 shadow-sm">
+                        <div class="flex flex-col items-center text-center mb-2">
+                            <i class="fas fa-horse-head text-teal-600 text-xl mb-2"></i>
+                            <h3 class="font-bold text-gray-800 text-sm">Equine Welfare Considerations</h3>
+                        </div>
+                        <ul class="text-sm text-gray-600 text-center space-y-1">
+                            <li>Include horses accustomed to fluttering ribbons.</li>
+                            <li>Make sure horses don't ingest the ribbons.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Facilitator Notes Card -->
+                    <div class="bg-teal-50 border border-teal-100 rounded-xl p-5 shadow-sm">
+                        <div class="flex flex-col items-center text-center mb-2">
+                            <i class="fas fa-user-friends text-teal-600 text-xl mb-2"></i>
+                            <h3 class="font-bold text-gray-800 text-sm">Facilitator Notes</h3>
+                        </div>
+                        <p class="text-sm text-gray-600 text-center">
+                            Avoid assumptions about gender/cultural expression, or relationship dynamics. Name and normalize the wide range of comfort with visibility, choice, and shared space.
+                        </p>
+                    </div>
+
+                    <!-- Variations Card -->
+                    <div class="bg-teal-50 border border-teal-100 rounded-xl p-5 shadow-sm">
+                        <div class="flex flex-col items-center text-center mb-4">
+                            <i class="fas fa-random text-teal-600 text-xl mb-2"></i>
+                            <h3 class="font-bold text-gray-800 text-sm">Variations</h3>
+                        </div>
+                        <div class="space-y-4 text-sm text-gray-600">
+                            <div>
+                                <span class="font-bold text-teal-700">Variation 1:</span>
+                                <p class="mt-1">Participants are invited to pick a ribbon and write on the ribbon what support they need to feel a sense of belonging. The group then creates a lead rope with their ribbons and leads a horse through a series of cones. How do the supports they need show up in the process? What is the horse teaching them about support? Paying attention to how the horses respond to being led, participants can choose to allow the horse off the ribbon lead. What choices does the horse have in the moment? Where do they want to go? What happens if they don't go through the cones? How can we remain connected if we don't want the same thing?</p>
+                            </div>
+                            <div class="border-t border-teal-200 pt-3">
+                                <span class="font-bold text-teal-700">Variation 2:</span>
+                                <p class="mt-1">Participants are invited to pick a ribbon and write on the ribbon what support they need to feel a sense of belonging. The group then weaves the ribbons together to create something long enough to form a circle in the pasture. Invite participants to stand in the circle once complete and explore what being inside/outside the circle feels like. Is the space big enough? What about the horses? How do we invite them in without pushing others out? Who wants to be in or out? What does that mean for them and how does that show up in their lives? What if the horses don't want to come into the circle? What does that bring up?</p>
+                            </div>
+                            <div class="border-t border-teal-200 pt-3">
+                                <span class="font-bold text-teal-700">Variation 3:</span>
+                                <p class="mt-1">Participants collaborate to braid or weave their ribbons together to clip onto the horses tails. Aim to slow down the process to be intentional about how to introduce the ribbons to the horses. Option to have horses choose their preferred ribbon - How can we tell what they might want? What is it like to see the horses holding the support?</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center justify-center pt-8 pb-4">
+                        <div class="flex text-teal-600 gap-2 text-xl mb-2">
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                        <button onclick="goToScreen('feedback')" class="text-gray-500 text-sm hover:text-teal-600">Rate Session?</button>
+                    </div>
+
+                </div>
+            </div>
+
+             <!-- SCREEN 5: FEEDBACK -->
+             <div id="screen-feedback" class="hidden min-h-full flex flex-col justify-center items-center p-6 fade-in">
+                <div class="w-16 h-16 bg-teal-600 rounded-full flex items-center justify-center text-white text-xl font-bold mb-6 shadow-lg">
+                    HM
+                </div>
+                
+                <h2 class="text-teal-700 font-bold uppercase tracking-wide text-sm mb-8">WE APPRECIATE YOUR FEEDBACK</h2>
+
+                <div class="w-full max-w-md">
+                    <p class="text-center text-gray-600 mb-2 text-sm">Want to add a comment?</p>
+                    <textarea class="w-full h-32 p-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm resize-none" placeholder="Enter Feedback"></textarea>
+                    
+                    <div class="flex justify-center gap-4 text-2xl text-teal-600 my-6 cursor-pointer">
+                        <i class="far fa-star hover:fas"></i>
+                        <i class="far fa-star hover:fas"></i>
+                        <i class="far fa-star hover:fas"></i>
+                        <i class="far fa-star hover:fas"></i>
+                        <i class="far fa-star hover:fas"></i>
+                    </div>
+
+                    <div class="space-y-3">
+                        <button onclick="alert('Thank you for your feedback!'); goToScreen('selection')" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition-colors">
+                            RATE SESSION
+                        </button>
+                        <button onclick="goToScreen('plan')" class="w-full bg-white border border-gray-300 hover:bg-gray-50 text-gray-500 font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center">
+                            <i class="fas fa-arrow-left mr-2"></i> BACK
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Global Footer Navigation (Mimicking the App Tabs) -->
+            <div id="app-footer" class="fixed bottom-0 w-full max-w-[900px] bg-teal-600 text-white flex justify-around py-3 rounded-b-2xl hidden">
+                <button class="flex flex-col items-center opacity-70 hover:opacity-100 w-1/4">
+                    <i class="fas fa-home text-lg"></i>
+                    <span class="text-[10px] mt-1">Home</span>
+                </button>
+                <button class="flex flex-col items-center w-1/4 font-bold border-b-2 border-white pb-1">
+                    <i class="far fa-heart text-lg"></i>
+                    <span class="text-[10px] mt-1">Favorites</span>
+                </button>
+                <button class="flex flex-col items-center opacity-70 hover:opacity-100 w-1/4">
+                    <i class="far fa-comment-dots text-lg"></i>
+                    <span class="text-[10px] mt-1">Forum</span>
+                </button>
+                <button class="flex flex-col items-center opacity-70 hover:opacity-100 w-1/4">
+                    <i class="far fa-user-circle text-lg"></i>
+                    <span class="text-[10px] mt-1">Profile</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // State Management
+        const screens = ['intro', 'form', 'selection', 'plan', 'feedback'];
+        
+        function goToScreen(screenId) {
+            // Hide all screens
+            screens.forEach(id => {
+                document.getElementById(`screen-${id}`).classList.add('hidden');
+            });
+            
+            // Show target screen
+            document.getElementById(`screen-${screenId}`).classList.remove('hidden');
+            
+            // Manage Header/Footer visibility
+            const header = document.getElementById('app-header');
+            const footer = document.getElementById('app-footer');
+            
+            if (screenId === 'intro') {
+                header.classList.add('hidden');
+                footer.classList.add('hidden');
+            } else {
+                header.classList.remove('hidden');
+                footer.classList.remove('hidden');
+            }
+
+            // Scroll to top
+            document.getElementById('main-content').scrollTop = 0;
+        }
+
+        // Form Logic
+        const inputs = ['input-scope', 'input-who', 'input-props', 'input-theme'];
+        const nextBtn = document.getElementById('btn-form-next');
+        const autoFillBtn = document.getElementById('btn-autofill');
+
+        function checkForm() {
+            const allFilled = inputs.every(id => document.getElementById(id).value !== "");
+            if (allFilled) {
+                nextBtn.disabled = false;
+                nextBtn.classList.remove('bg-gray-300', 'cursor-not-allowed');
+                nextBtn.classList.add('bg-teal-600', 'hover:bg-teal-700');
+            }
+        }
+
+        // Add event listeners to inputs
+        inputs.forEach(id => {
+            document.getElementById(id).addEventListener('change', checkForm);
+        });
+
+        function autoFillForm() {
+            document.getElementById('input-scope').value = "psychotherapy";
+            document.getElementById('input-who').value = "org-teams";
+            document.getElementById('input-props').value = "physical";
+            document.getElementById('input-theme').value = "identity";
+            checkForm();
+            // Optional visual feedback
+            autoFillBtn.innerText = "Form Filled!";
+            autoFillBtn.classList.remove('text-teal-600');
+            autoFillBtn.classList.add('text-green-600');
+        }
+
+        // Initial setup
+        goToScreen('intro');
+
+    </script>
+</body>
+</html>
+
