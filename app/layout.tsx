@@ -3,8 +3,8 @@ import { VariantProvider } from "@/lib/variants";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "HERDMind® Session Planner",
-  description: "Equine-facilitated session planning tool",
+  title: "HERDMind App Evolution Hub",
+  description: "Visualize the future of HERDMind while optimizing the current Adalo infrastructure",
 };
 
 export default function RootLayout({

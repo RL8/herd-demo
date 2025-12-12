@@ -65,8 +65,8 @@ export default function HomeScreen() {
             <h1 className="text-xl font-bold text-gray-900 mb-1">
               HERDMind® Session Planner
             </h1>
-            <p className="text-gray-600 text-xs">
-              Explore three design concepts
+            <p className="text-gray-600 text-xs px-4">
+              Choose a design concept to explore. You can return here anytime to try a different approach.
             </p>
           </div>
 
@@ -126,7 +126,7 @@ export default function HomeScreen() {
                         </div>
                       )}
                       <button className="text-teal-600 text-xs font-medium flex items-center gap-1 hover:text-teal-700 mt-1">
-                        Try this concept
+                        Start exploring
                         <ArrowRight className="w-3 h-3" />
                       </button>
                     </div>
@@ -137,9 +137,10 @@ export default function HomeScreen() {
           </div>
 
           {/* Footer Note */}
-          <div className="mt-4 text-center">
-            <p className="text-xs text-gray-500">
-              Use bottom navigation to switch
+          <div className="mt-6 bg-teal-50 rounded-xl p-4 border border-teal-100">
+            <p className="text-xs text-teal-800 text-center leading-relaxed">
+              <span className="font-semibold">💡 Tip:</span> Once you select a concept, explore it fully. 
+              Use the bottom navigation to return here and try a different approach.
             </p>
           </div>
         </div>

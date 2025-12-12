@@ -48,7 +48,7 @@ export default function AdminNav() {
             href="/"
             className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
           >
-            ← Back to Demo
+            ← Back to Home
           </Link>
         </div>
       </div>
